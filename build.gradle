@@ -29,5 +29,5 @@ dependencies {
 
 sourceCompatibility = '1.7'
 
-group = 'ca.nrc.cadc'
-version = '1.0.3'
+group = 'org.opencadc'
+version = '1.1.0'
