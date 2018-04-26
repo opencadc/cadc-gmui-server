@@ -121,7 +121,7 @@
               navigation_menu_new_group_label: 'Créer une groupe'
             }
           },
-          resource: '/gmui/service',
+          resource: 'service',
           Group: Group,
           GroupManager: GroupManager,
 

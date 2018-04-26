@@ -31,6 +31,7 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.restlet.resources;
 
 import ca.nrc.cadc.ac.Group;
@@ -42,36 +43,21 @@ import org.restlet.resource.Delete;
 import java.util.Iterator;
 
 
-public class GroupAdminResource extends AbstractAssociateResource
-{
+public class GroupAdminResource extends AbstractAssociateResource {
     @Delete
-    public void remove(final Representation payload) throws Exception
-    {
+    public void remove(final Representation payload) throws Exception {
         final Associate associate = getAssociate(payload);
         final Group group = getGroup();
 
-        if (associate.isUser())
-        {
-            for (final Iterator<User> userAdminIter
-                         = group.getUserAdmins().iterator();
-                 userAdminIter.hasNext();)
-            {
-                if (userAdminIter.next().getHttpPrincipal().getName()
-                    .equals(associate.getID()))
-                {
+        if (associate.isUser()) {
+            for (final Iterator<User> userAdminIter = group.getUserAdmins().iterator(); userAdminIter.hasNext(); ) {
+                if (userAdminIter.next().getHttpPrincipal().getName().equals(associate.getID())) {
                     userAdminIter.remove();
                 }
             }
-        }
-        else
-        {
-            for (final Iterator<Group> groupAdminIter
-                         = group.getGroupAdmins().iterator();
-                 groupAdminIter.hasNext();)
-            {
-                if (groupAdminIter.next().getID().getName().equals(
-                        associate.getID()))
-                {
+        } else {
+            for (final Iterator<Group> groupAdminIter = group.getGroupAdmins().iterator(); groupAdminIter.hasNext(); ) {
+                if (groupAdminIter.next().getID().getName().equals(associate.getID())) {
                     groupAdminIter.remove();
                 }
             }

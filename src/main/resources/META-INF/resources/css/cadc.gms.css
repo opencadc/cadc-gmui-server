@@ -72,7 +72,7 @@ div.associates
   border: 1px solid gray;
   border-bottom: 0;
   border-top: 0;
-  background: url('/cadcVOTV/images/header-bg.gif') repeat-x center top;
+  background: url('../cadcVOTV/images/header-bg.gif') repeat-x center top;
   color: black;
   height: 24px;
   line-height: 24px;
@@ -113,6 +113,10 @@ div.associates
 {
   font-weight: normal;
   color: rgba(9, 62, 168, 1);
+}
+
+.slick-header-column.ui-state-default {
+  height: 24px;
 }
 
 .slick-cell.task-percent {

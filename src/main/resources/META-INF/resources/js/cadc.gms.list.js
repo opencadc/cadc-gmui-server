@@ -73,9 +73,7 @@ $(document).ready(function() {
     var groupOwner = groupManager.translateField('list_header_owner_name')
     var groupAdmins = groupManager.translateField('list_header_admins')
     var groupMembers = groupManager.translateField('list_header_members')
-    var groupDescription = groupManager.translateField(
-      'list_header_description'
-    )
+    var groupDescription = groupManager.translateField('list_header_description')
 
     // Options for the three VOTable Viewers.
     var actionColumnName = '_' + groupName
@@ -295,7 +293,7 @@ $(document).ready(function() {
 
     var input = {
       tableMetadata: metaData,
-      url: '/gmui/service/groups',
+      url: 'service/groups',
       useRelativeURL: true,
       pageSize: 100
     }
@@ -467,6 +465,8 @@ $(document).ready(function() {
       sortDir: 'asc'
     }
 
+    var heightOffset = $('header').height() + $('#tabList').height() + 110
+
     var options = $.extend(
       true,
       {
@@ -482,6 +482,8 @@ $(document).ready(function() {
           groupMembers,
           groupDescription
         ],
+        variableViewportHeight: true,
+        heightOffset: heightOffset,
         targetNodeSelector: '#group_list_grid',
         columnManager: {
           filterable: true,
@@ -792,30 +794,27 @@ $(document).ready(function() {
         $thisForm.addClass(CSS_INVISIBLE)
       }
 
-      memberInput.url =
-        cadc.web.gms.resource +
-        '/group/' +
-        groupName +
-        '/members?media=text/csv'
+      memberInput.url = cadc.web.gms.resource + '/group/' + groupName + '/members?media=text/csv'
       groupManager.getMembers(groupName, memberInput, memberViewOptions)
     })
 
     $editAdminsContainer.on('shown.bs.modal', function(event) {
-      var $thisContainer = $(event.relatedTarget)
-      var groupName = $thisContainer.data('group-name')
-      var isAdmin = $thisContainer.data('group-admin')
-      var $thisForm = $thisContainer.find('form')
+      var $thisTarget = $(event.relatedTarget)
+      var $thisContainer = $(this)
 
       containerOpen($thisContainer)
 
+      var groupName = $thisTarget.data('group-name')
+      var isAdmin = $thisTarget.data('group-admin')
+      var $thisForm = $thisContainer.find('form')
+
       if (isAdmin === true) {
-        $thisForm.find('.form-container').removeClass(CSS_INVISIBLE)
+        $thisForm.removeClass(CSS_INVISIBLE)
       } else {
-        $thisForm.find('.form-container').addClass(CSS_INVISIBLE)
+        $thisForm.addClass(CSS_INVISIBLE)
       }
 
-      adminInput.url =
-        cadc.web.gms.resource + '/group/' + groupName + '/admins?media=text/csv'
+      adminInput.url = cadc.web.gms.resource + '/group/' + groupName + '/admins?media=text/csv'
       groupManager.getAdmins(groupName, adminInput, adminViewOptions)
     })
 
