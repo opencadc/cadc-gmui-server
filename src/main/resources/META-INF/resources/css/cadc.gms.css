@@ -1,0 +1,184 @@
+.user_column
+{
+  font-weight: bold;
+}
+
+.ui-widget-content a {
+  color: #337ab7;
+  text-decoration: none
+}
+
+div.associates
+{
+  width: 450px;
+}
+
+.associate_grid
+{
+  width: 100% !important;
+  height: 200px;
+  min-height: 200px;
+  outline: 0;
+  background: #fff;
+  border: 1px solid gray;
+}
+
+.ui-autocomplete
+{
+  position: absolute;
+  cursor: default;
+  z-index: 10000000 !important;
+}
+
+.remove_assoc_link
+{
+  margin-left: 25%;
+}
+
+.loader_container
+{
+  width: 100%;
+}
+
+.form-message {
+  font-size: 120%;
+}
+
+.ui-autocomplete-loading
+{
+  background: white url("../images/ui-anim_basic_16x16.gif") right center no-repeat;
+}
+
+.ui-autocomplete-message
+{
+  display: block;
+  font-style: italic;
+}
+
+#group_list_grid
+{
+  width: 880px;
+  height: 400px;
+  /*overflow: hidden;*/
+  outline: 0;
+  background: #fff;
+  border: 1px solid gray;
+}
+
+.grid-header
+{
+  font-family: Arial, serif;
+  font-size: 8pt;
+  border: 1px solid gray;
+  border-bottom: 0;
+  border-top: 0;
+  background: url('../cadcVOTV/images/header-bg.gif') repeat-x center top;
+  color: black;
+  height: 24px;
+  line-height: 24px;
+  width: 100% !important;
+  padding-left: 0.3em;
+}
+
+.grid-header label
+{
+  display: inline-block;
+  font-weight: bold;
+  margin: auto auto auto 6px;
+}
+
+.grid-header .ui-icon {
+  margin: 4px 4px auto 6px;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.grid-header .ui-icon.ui-state-hover {
+  background-color: white;
+}
+
+.grid-canvas
+{
+  font-family: arial, serif;
+  font-size: 9pt;
+}
+
+  /* Individual cell styles */
+.slick-cell.task-name {
+  font-weight: bold;
+  text-align: right;
+}
+
+.slick-column-name
+{
+  font-weight: normal;
+  color: rgba(9, 62, 168, 1);
+}
+
+.slick-header-column.ui-state-default {
+  height: 24px;
+}
+
+.slick-cell.task-percent {
+  text-align: right;
+}
+
+.slick-cell.cell-move-handle {
+  font-weight: bold;
+  text-align: right;
+  border-right: solid gray;
+
+  background: #efefef;
+  cursor: move;
+}
+
+.cell-move-handle:hover {
+  background: #b6b9bd;
+}
+
+.slick-row.selected .cell-move-handle {
+  background: #D5DC8D;
+}
+
+.slick-row .cell-actions {
+  text-align: left;
+}
+
+.slick-row.complete {
+  background-color: #DFD;
+  color: #555;
+}
+
+.percent-complete-bar {
+  display: inline-block;
+  height: 6px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.rightbutton
+{
+  float: none;
+}
+
+/**
+  Used to determine column widths.
+*/
+#lengthFinder
+{
+  position: absolute;
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  white-space: nowrap;
+
+  /* Be generous with spacing. */
+  /*font-family: Courier New, Courier, monospace;*/
+  font-size: 1.0em;
+  font-family: Verdana,Arial,sans-serif;
+  /*font-size: 1.1em;*/
+}
+
+.top-buffer {
+  margin-top:10px;
+}
