@@ -387,6 +387,13 @@
   <script type="application/javascript" src="js/cadc.gms.js"></script>
   <script type="application/javascript" src="js/cadc.gms.list.js"></script>
 
+  <script type="application/javascript">
+    $(document).ready(function() {
+      var app = new App({grid_offset: 100})
+      app.loadGroups()    
+    })  
+  </script>
+
 </body>
 
 </html>
