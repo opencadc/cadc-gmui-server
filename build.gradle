@@ -30,7 +30,3 @@ dependencies {
 sourceCompatibility = '1.7'
 group = 'org.opencadc'
 version = '1.2.0'
-
-jar {
-    archiveName = 'cadc-gmui-server-' + project.version + '.jar'
-}
