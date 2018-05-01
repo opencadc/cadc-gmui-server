@@ -17,8 +17,8 @@ dependencies {
     compile 'org.restlet.jee:org.restlet.ext.json:2.3.+'
 
     compile 'org.opencadc:cadc-dali:1.+'
-    compile 'org.opencadc:cadc-util:1.1.0'
-    compile 'org.opencadc:cadc-web-util:1.0.13'
+    compile 'org.opencadc:cadc-util:[1.1, )'
+    compile 'org.opencadc:cadc-web-util:[1.0, )'
     compile 'org.opencadc:cadc-registry:1.+'
     compile 'org.opencadc:cadc-access-control:1.+'
 
