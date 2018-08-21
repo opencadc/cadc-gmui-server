@@ -31,6 +31,7 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.view.json;
 
 
@@ -43,20 +44,19 @@ import ca.nrc.cadc.groups.web.view.GMSView;
 /**
  * Common JSON view mechanism.
  */
-public abstract class AbstractJSONViewImpl<T> implements GMSView<T>
-{
+public abstract class AbstractJSONViewImpl<T> implements GMSView<T> {
     private final JSONWriter jsonWriter;
     private final JSONViewType viewType;
     private final boolean hasOwnerRights;
+    private final boolean hasAdminRights;
 
 
-    AbstractJSONViewImpl(final JSONWriter jsonWriter,
-                         final JSONViewType viewType,
-                         final boolean hasOwnerRights)
-    {
+    AbstractJSONViewImpl(final JSONWriter jsonWriter, final JSONViewType viewType, final boolean hasOwnerRights,
+                         final boolean hasAdminRights) {
         this.jsonWriter = jsonWriter;
         this.viewType = viewType;
         this.hasOwnerRights = hasOwnerRights;
+        this.hasAdminRights = hasAdminRights;
     }
 
 
@@ -67,8 +67,7 @@ public abstract class AbstractJSONViewImpl<T> implements GMSView<T>
      * @param value The Value of the key.
      * @throws JSONException Any writing error.
      */
-    void write(final String key, final String value) throws JSONException
-    {
+    void write(final String key, final String value) throws JSONException {
         jsonWriter.key(key).value(value);
     }
 
@@ -79,10 +78,8 @@ public abstract class AbstractJSONViewImpl<T> implements GMSView<T>
      * @throws JSONException Anything that can go wrong.
      */
     @Override
-    public final void write(final T model) throws JSONException
-    {
-        if (viewType == JSONViewType.OBJECT)
-        {
+    public final void write(final T model) throws JSONException {
+        if (viewType == JSONViewType.OBJECT) {
             writeObject(model);
         }
     }
@@ -91,19 +88,16 @@ public abstract class AbstractJSONViewImpl<T> implements GMSView<T>
      * Write a JSON object.
      *
      * @param model The item to write.
-     * @throws JSONException        Any JSON writing errors.
+     * @throws JSONException Any JSON writing errors.
      */
-    private void writeObject(final T model) throws JSONException
-    {
+    private void writeObject(final T model) throws JSONException {
         jsonWriter.object();
 
-        try
-        {
+        try {
             writeJSON(model);
             write("OwnerRights", Boolean.toString(hasOwnerRights));
-        }
-        finally
-        {
+            write("AdminRights", Boolean.toString(hasAdminRights));
+        } finally {
             jsonWriter.endObject();
         }
     }
@@ -117,8 +111,7 @@ public abstract class AbstractJSONViewImpl<T> implements GMSView<T>
     abstract void writeJSON(final T model) throws JSONException;
 
 
-    protected enum JSONViewType
-    {
+    protected enum JSONViewType {
         OBJECT, ARRAY
     }
 }

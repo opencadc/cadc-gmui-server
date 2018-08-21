@@ -31,6 +31,7 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.view.json;
 
 import ca.nrc.cadc.ac.User;
@@ -40,44 +41,38 @@ import org.json.JSONException;
 import org.json.JSONWriter;
 
 
-public class JSONMemberViewImpl extends AbstractJSONViewImpl<User>
-{
+public class JSONMemberViewImpl extends AbstractJSONViewImpl<User> {
     /**
      * Represent a User as JSON.
      *
-     * @param _jsonWriter        The JSON Writer instance.
-     * @param hasOwnerRights     Whether the receiving user has admin
-     *                           privileges.
+     * @param _jsonWriter    The JSON Writer instance.
+     * @param hasOwnerRights Whether the receiving user is the owner.
+     * @param hasAdminRights Whether the receiving user has administrative privileges.
      */
-    public JSONMemberViewImpl(final JSONWriter _jsonWriter,
-                              final boolean hasOwnerRights)
-    {
-        super(_jsonWriter, JSONViewType.OBJECT, hasOwnerRights);
+    public JSONMemberViewImpl(final JSONWriter _jsonWriter, final boolean hasOwnerRights,
+                              final boolean hasAdminRights) {
+        super(_jsonWriter, JSONViewType.OBJECT, hasOwnerRights, hasAdminRights);
     }
 
 
     /**
      * Write this user.
      *
-     * @param user              The user to write.
+     * @param user The user to write.
      * @throws JSONException
      */
     @Override
-    void writeJSON(final User user) throws JSONException
-    {
+    void writeJSON(final User user) throws JSONException {
         final String parsedName = UserInfoParser.getFullName(user);
         final String name = StringUtil.hasText(parsedName) ? parsedName : "";
         final String parsedUsername = UserInfoParser.getUsername(user);
         final String id;
         final String username;
 
-        if (StringUtil.hasText(parsedUsername))
-        {
+        if (StringUtil.hasText(parsedUsername)) {
             id = parsedUsername;
             username = parsedUsername;
-        }
-        else
-        {
+        } else {
             id = "";
             username = "";
         }

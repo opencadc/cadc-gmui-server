@@ -23,7 +23,13 @@
               '404_message': 'Group or User not found.',
               '404_NO_SUCH_USER_message': 'No such user',
               '404_NO_SUCH_GROUP_message': 'No such group',
-              '409_Conflict_message':
+              '409_Group_message': 'Group already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
+              '409_Group_reason': 'Conflict',
+              '409_Admin_reason': 'Conflict',
+              '409_Admin_message':
+                'Administrator already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
+              '409_Member_reason': 'Conflict',
+              '409_Member_message':
                 'Member already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
               '500_reason': 'Server error',
               '500_message': 'Please try again later.',
@@ -80,8 +86,14 @@
               '404_message': "Groupe ou Utilisateur n'existe pas.",
               '404_NO_SUCH_USER_message': "Utilisateur n'existe pas",
               '404_NO_SUCH_GROUP_message': "Groupe n'existe pas",
-              '409_Conflict_message':
+              '409_Group_message': 'Le groupe existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
+              '409_Group_reason': 'Contradiction',
+              '409_Member_reason': 'Conflict',
+              '409_Member_message':
                 'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
+              '409_Admin_reason': 'Conflict',
+              '409_Admin_message':
+                'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',              
               '500_reason': 'Erreur',
               '500_message': "S'il vous plais essayer encore plus tard.",
               '503_reason': 'Indisponible',
@@ -195,9 +207,9 @@
       return translateField(_statusCode + '_reason')
     }
 
-    function getErrorMessage(jqXHR) {
+    function getErrorMessage(jqXHR, key_append) {
       var statusCode = jqXHR.status
-      var key = '' + statusCode
+      var key = '' + statusCode + (key_append ? key_append : '')
 
       // Simplify some messages.
       if (statusCode === 404 || statusCode === 400) {
@@ -205,6 +217,7 @@
       } else if (
         statusCode !== 401 &&
         statusCode !== 403 &&
+        statusCode !== 409 &&
         statusCode !== 500
       ) {
         key += '_' + jqXHR.statusText
@@ -347,8 +360,8 @@
             textStatus: textStatus,
             error: error,
             request: jqxhr,
-            reason: getErrorReason(jqxhr.status),
-            message: getErrorMessage(jqxhr)
+            reason: getErrorReason(jqxhr.status + '_Admin'),
+            message: getErrorMessage(jqxhr, '_Admin')
           })
         })
     }
@@ -500,12 +513,12 @@
             textStatus: textStatus,
             error: error,
             request: jqxhr,
-            reason: getErrorReason(jqxhr.status),
+            reason: getErrorReason(jqxhr.status + '_Member'),
             message: getErrorMessage({
               status: jqxhr.status,
               responseText: statusText,
               statusText: statusText
-            })
+            }, '_Member')
           })
         })
     }
@@ -636,8 +649,8 @@
             textStatus: options,
             error: error,
             request: jqxhr,
-            reason: getErrorReason(jqxhr.status),
-            message: getErrorMessage(jqxhr)
+            reason: getErrorReason(jqxhr.status + '_Group'),
+            message: getErrorMessage(jqxhr, '_Group')
           })
         })
     }

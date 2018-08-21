@@ -130,6 +130,7 @@ public class GroupListResource extends AbstractResource {
 
                 // Used internally.
                 tab.getFields().add(new VOTableField("OwnerRights", "char"));
+                tab.getFields().add(new VOTableField("AdminRights", "char"));
 
                 tab.setTableData(new TableData() {
                     @Override
@@ -198,6 +199,7 @@ public class GroupListResource extends AbstractResource {
                                                  : "");
 
                                 groupRow.add(ArrayUtil.contains(Role.OWNER, entry.getValue()));
+                                groupRow.add(isAdmin(entry.getValue()));
 
                                 return groupRow;
                             }
@@ -254,7 +256,7 @@ public class GroupListResource extends AbstractResource {
                 public void write(final Writer writer) throws IOException {
                     final JSONWriter jsonWriter = new JSONWriter(writer);
                     final JSONGroupViewImpl groupWriter =
-                        new JSONGroupViewImpl(jsonWriter, true);
+                        new JSONGroupViewImpl(jsonWriter, true, true);
 
                     try {
                         groupWriter.write(createdGroup);
