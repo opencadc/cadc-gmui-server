@@ -5,14 +5,14 @@
   $.extend(true, window, {
     App: GMUI
   })
-    
+
   /**
    * GMUI Listing application
    * @constructor
    * @param {} _options
    *        _options{grid_offset: 100}  Offset for the grid to the bottom of the page.
    */
-  function GMUI (_options) {
+  function GMUI(_options) {
     /**
      * Start the application.
      */
@@ -171,6 +171,18 @@
           '*',
           null,
           'OwnerRights'
+        ),
+        new cadc.vot.Field(
+          'AdminRights',
+          'AdminRights',
+          null,
+          'gms.group_admin_rights',
+          null,
+          null,
+          new cadc.vot.Datatype('char'),
+          '*',
+          null,
+          'AdminRights'
         )
       ]
 
@@ -235,6 +247,18 @@
           '*',
           null,
           'OwnerRights'
+        ),
+        new cadc.vot.Field(
+          'AdminRights',
+          'AdminRights',
+          null,
+          'gms.group_admin_rights',
+          null,
+          null,
+          new cadc.vot.Datatype('char'),
+          '*',
+          null,
+          'AdminRights'
         )
       ]
 
@@ -299,6 +323,18 @@
           '*',
           null,
           'OwnerRights'
+        ),
+        new cadc.vot.Field(
+          'AdminRights',
+          'AdminRights',
+          null,
+          'gms.group_admin_rights',
+          null,
+          null,
+          new cadc.vot.Datatype('char'),
+          '*',
+          null,
+          'AdminRights'
         )
       ]
 
@@ -338,7 +374,7 @@
         formatter: function(row, cell, value, columnDef, dataContext) {
           var stringHTML
 
-          if (dataContext['OwnerRights'] === 'true') {
+          if (dataContext['AdminRights'] === 'true') {
             stringHTML =
               '<span class="cellValue"><a href="#" class="remove_assoc_link" data-association="members" data-assoc-id="' +
               dataContext['MemberID'] +
@@ -369,7 +405,7 @@
         formatter: function(row, cell, value, columnDef, dataContext) {
           var stringHTML
 
-          if (dataContext['OwnerRights'] === 'true') {
+          if (dataContext['AdminRights'] === 'true') {
             stringHTML =
               '<span class="cellValue"><a href="#" class="remove_assoc_link" data-association="admins" data-assoc-id="' +
               dataContext['AdminID'] +
@@ -901,7 +937,10 @@
         data
       ) {
         $newGroupContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        $groupForm.find('#submit_error').text('Create failed: ' + data.message)
+        $newGroupContainer
+          .find('form')
+          .find('.form-message')
+          .text(data.message)
       })
 
       groupManager.subscribe(cadc.web.gms.events.onGroupDeleted, function() {

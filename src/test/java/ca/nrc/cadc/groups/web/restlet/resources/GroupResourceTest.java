@@ -31,12 +31,14 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.restlet.resources;
 
 import ca.nrc.cadc.ac.User;
 import ca.nrc.cadc.groups.web.WebGroupURI;
 import ca.nrc.cadc.util.ObjectUtil;
 import org.junit.Test;
+
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
@@ -52,27 +54,23 @@ import ca.nrc.cadc.ac.Group;
 import ca.nrc.cadc.ac.client.GMSClient;
 
 
-public class GroupResourceTest extends AbstractResourceTest<GroupResource>
-{
+public class GroupResourceTest extends AbstractResourceTest<GroupResource> {
     @Test
-    public void represent() throws Exception
-    {
+    public void represent() throws Exception {
         final Group currentTestGroup = new Group(new WebGroupURI("CURR_GROUP"));
         ObjectUtil.setField(currentTestGroup, testOwner, "owner");
 
         currentTestGroup.description = "TEST CURRENT GROUP";
 
         // TEST CREATE
-        setTestSubject(new GroupResource()
-        {
+        setTestSubject(new GroupResource() {
             /**
              * Obtain the Group ID.
              *
              * @return The Group's ID in the current context.
              */
             @Override
-            public String getGroupName()
-            {
+            public String getGroupName() {
                 return "CURR_GROUPID";
             }
 
@@ -82,8 +80,7 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
              * @return User instance.
              */
             @Override
-            User getCurrentUser()
-            {
+            User getCurrentUser() {
                 return testOwner;
             }
 
@@ -94,14 +91,13 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
              * @return the GMSClient instance
              */
             @Override
-            public GMSClient getGMSClient()
-            {
+            public GMSClient getGMSClient() {
                 return getMockGMSClient();
             }
         });
 
         expect(getMockGMSClient().getGroup("CURR_GROUPID")).andReturn(
-                currentTestGroup).once();
+            currentTestGroup).once();
 
         replay(getMockGMSClient());
 
@@ -115,9 +111,10 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
                      MediaType.APPLICATION_JSON, rep.getMediaType());
 
         final JSONObject resultJSONObject =
-                new JSONObject(stringWriter.toString());
+            new JSONObject(stringWriter.toString());
         final JSONObject expectedJSONObject =
-                new JSONObject("{\"name\":\"CURR_GROUP\",\"owner_name\":\"CADC Test\",\"description\":\"TEST CURRENT GROUP\",\"type\":\"GROUP\",\"OwnerRights\":\"true\"}");
+            new JSONObject("{\"name\":\"CURR_GROUP\",\"owner_name\":\"CADC Test\",\"description\":\"TEST CURRENT " +
+                               "GROUP\",\"type\":\"GROUP\",\"OwnerRights\":\"true\",\"AdminRights\":\"true\"}");
 
         JSONAssert.assertEquals(expectedJSONObject, resultJSONObject, true);
 
@@ -125,14 +122,12 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
     }
 
     @Test
-    public void update() throws Exception
-    {
+    public void update() throws Exception {
         final Group testGroup = new Group(new WebGroupURI("TEST_GROUP"));
         ObjectUtil.setField(testGroup, testOwner, "owner");
         testGroup.description = "DESCRIPTION BEFORE UPDATE.";
 
-        setTestSubject(new GroupResource()
-        {
+        setTestSubject(new GroupResource() {
             /**
              * Obtain the Group ID. This is double decoded to support the double
              * encoding necessary to fool the browser into submitting an encoded
@@ -141,8 +136,7 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
              * @return The Group's ID in the current context.
              */
             @Override
-            protected String getGroupName()
-            {
+            protected String getGroupName() {
                 return "GROUP_TO_UPDATE";
             }
 
@@ -153,20 +147,19 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
              * @return the GMSClient instance
              */
             @Override
-            public GMSClient getGMSClient()
-            {
+            public GMSClient getGMSClient() {
                 return getMockGMSClient();
             }
         });
 
         expect(getMockGMSClient().getGroup("GROUP_TO_UPDATE")).andReturn(
-                testGroup).once();
+            testGroup).once();
         expect(getMockForm().getFirstValue(
-                GroupResource.GROUP_DESCRIPTION_FIELD)).andReturn(
-                "NEW DESC").once();
+            GroupResource.GROUP_DESCRIPTION_FIELD)).andReturn(
+            "NEW DESC").once();
 
         expect(getMockGMSClient().updateGroup(testGroup)).andReturn(testGroup).
-                once();
+            once();
 
         replay(getMockForm(), getMockGMSClient());
 
@@ -179,18 +172,15 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
     }
 
     @Test
-    public void delete() throws Exception
-    {
-        setTestSubject(new GroupResource()
-        {
+    public void delete() throws Exception {
+        setTestSubject(new GroupResource() {
             /**
              * Obtain the Group ID.
              *
              * @return The Group's ID in the current context.
              */
             @Override
-            public String getGroupName()
-            {
+            public String getGroupName() {
                 return "MYGROUP";
             }
 
@@ -201,8 +191,7 @@ public class GroupResourceTest extends AbstractResourceTest<GroupResource>
              * @return the GMSClient instance
              */
             @Override
-            public GMSClient getGMSClient()
-            {
+            public GMSClient getGMSClient() {
                 return getMockGMSClient();
             }
         });

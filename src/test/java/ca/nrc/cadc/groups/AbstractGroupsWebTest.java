@@ -46,6 +46,7 @@ public abstract class AbstractGroupsWebTest<T>
 {
     private T testSubject;
     final protected User testOwner = new User();
+    final protected User secondTestOwner = new User();
 
     /**
      * Initialize the Test Owner here.
@@ -55,6 +56,10 @@ public abstract class AbstractGroupsWebTest<T>
         testOwner.getIdentities().add(new HttpPrincipal("owner"));
         testOwner.getIdentities().add(new X500Principal("CN=owner,OU=CADC,O=HIA,C=CA"));
         testOwner.personalDetails = new PersonalDetails("CADC", "Test");
+
+        secondTestOwner.getIdentities().add(new HttpPrincipal("secondowner"));
+        secondTestOwner.getIdentities().add(new X500Principal("CN=secondowner,OU=CADC,O=HIA,C=CA"));
+        secondTestOwner.personalDetails = new PersonalDetails("CADC", "SecondTest");
     }
 
 

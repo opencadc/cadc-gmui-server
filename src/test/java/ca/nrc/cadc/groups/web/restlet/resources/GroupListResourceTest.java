@@ -125,7 +125,7 @@ public class GroupListResourceTest
             assertEquals("Should be CSV.", MediaType.TEXT_CSV,
                          rep.getMediaType());
             assertEquals("Group list CSV is wrong.",
-                         "Name,Owner,Admin,Member,Description,OwnerRights\n",
+                         "Name,Owner,Admin,Member,Description,OwnerRights,AdminRights\n",
                          writer.toString());
         }
         finally
@@ -244,13 +244,13 @@ public class GroupListResourceTest
         assertEquals("Should be CSV.", MediaType.TEXT_CSV, rep.getMediaType());
 
         final String expectedCSV =
-                "Name,Owner,Admin,Member,Description,OwnerRights\n" +
-                "AGROUP2,debrown_88,true,true,,false\n"
-                + "BGROUP1,CADC Test,true,true,DO NOT DELETE,true\n"
-                + "MEMGROUP2,someoneelse_4,false,true,,false\n"
-                + "MEMGROUP3,someoneelse_4,false,true,Member group,false\n"
-                + "MYGROUP1,CADC Test,true,true,,true\n"
-                + "MYGROUP3,CADC Test,true,true,THIS IS MY GROUP 3!,true\n";
+                "Name,Owner,Admin,Member,Description,OwnerRights,AdminRights\n" +
+                "AGROUP2,debrown_88,true,true,,false,true\n"
+                + "BGROUP1,CADC Test,true,true,DO NOT DELETE,true,true\n"
+                + "MEMGROUP2,someoneelse_4,false,true,,false,false\n"
+                + "MEMGROUP3,someoneelse_4,false,true,Member group,false,false\n"
+                + "MYGROUP1,CADC Test,true,true,,true,true\n"
+                + "MYGROUP3,CADC Test,true,true,THIS IS MY GROUP 3!,true,true\n";
 
         final String resultCSV = writer.toString();
 

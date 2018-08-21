@@ -38,6 +38,7 @@ import javax.security.auth.x500.X500Principal;
 import java.io.*;
 
 import ca.nrc.cadc.ac.MemberAlreadyExistsException;
+import ca.nrc.cadc.ac.Role;
 import ca.nrc.cadc.groups.web.WebGroupURI;
 import ca.nrc.cadc.util.ObjectUtil;
 import org.json.JSONObject;
@@ -113,8 +114,8 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         testGroup.getGroupMembers().add(new Group(new WebGroupURI("TimeTravellers")));
 
-        expect(getMockGMSClient().getGroup("GROUP1")).andReturn(
-            testGroup).once();
+        expect(getMockGMSClient().getGroup("GROUP1")).andReturn(testGroup).once();
+        expect(getMockGMSClient().getMembership("GROUP1", Role.ADMIN)).andReturn(null).once();
 
         replay(getMockGMSClient());
 
@@ -125,10 +126,10 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         final String resultCSV = writer.toString();
         final String expectedCSV =
-            "ID,Name,MemberID,Type,OwnerRights\n"
-                + "GROUP1,CADC Test,member1,USER,false\n"
-                + "GROUP1,Marty McFly,member2,USER,false\n"
-                + "GROUP1,All members of TimeTravellers,TimeTravellers,GROUP,false\n";
+            "ID,Name,MemberID,Type,OwnerRights,AdminRights\n"
+                + "GROUP1,CADC Test,member1,USER,false,false\n"
+                + "GROUP1,Marty McFly,member2,USER,false,false\n"
+                + "GROUP1,All members of TimeTravellers,TimeTravellers,GROUP,false,false\n";
 
         assertEquals("Wrong CSV", expectedCSV, resultCSV);
 
@@ -189,8 +190,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         testGroup.getGroupMembers().add(new Group(new WebGroupURI("TimeTravellers")));
 
-        expect(getMockGMSClient().getGroup("GROUP1")).andReturn(
-            testGroup).once();
+        expect(getMockGMSClient().getGroup("GROUP1")).andReturn(testGroup).once();
 
         replay(getMockGMSClient());
 
@@ -202,10 +202,10 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
         final JSONObject resultJSONObject = new JSONObject(writer.toString());
         final JSONObject expectedJSONObject =
             new JSONObject("{\"groupName\":\"GROUP1\", \"members\": [{\"id\":\"CADCtest\",\"username\":\"CADCtest\"," +
-                               "\"name\":\"CADC Test\",\"type\":\"USER\",\"OwnerRights\":\"true\"}," +
+                               "\"name\":\"CADC Test\",\"type\":\"USER\",\"AdminRights\":\"true\"}," +
                                "{\"id\":\"at88mph\",\"username\":\"at88mph\",\"name\":\"Marty McFly\"," +
-                               "\"type\":\"USER\",\"OwnerRights\":\"true\"},{\"name\":\"TimeTravellers\"," +
-                               "\"type\":\"GROUP\",\"OwnerRights\":\"true\"}]}");
+                               "\"type\":\"USER\",\"AdminRights\":\"true\"},{\"name\":\"TimeTravellers\"," +
+                               "\"type\":\"GROUP\",\"AdminRights\":\"true\"}]}");
 
         JSONAssert.assertEquals(expectedJSONObject, resultJSONObject, false);
 

@@ -37,6 +37,7 @@ package ca.nrc.cadc.groups.web.restlet.resources;
 import javax.security.auth.x500.X500Principal;
 import java.io.*;
 
+import ca.nrc.cadc.ac.Role;
 import ca.nrc.cadc.groups.web.WebGroupURI;
 import ca.nrc.cadc.util.ObjectUtil;
 import org.apache.log4j.Level;
@@ -102,7 +103,7 @@ public class GroupAdminListResourceTest extends AbstractResourceTest<GroupAdminL
         });
 
         final Group testGroup = new Group(new WebGroupURI("GROUP1"));
-        ObjectUtil.setField(testGroup, testOwner, "owner");
+        ObjectUtil.setField(testGroup, secondTestOwner, "owner");
 
         final User admin1 = new User();
         admin1.getIdentities().add(new HttpPrincipal("CADCtest"));
@@ -118,6 +119,7 @@ public class GroupAdminListResourceTest extends AbstractResourceTest<GroupAdminL
 
         expect(getMockGMSClient().getGroup("GROUP1")).andReturn(
             testGroup).once();
+        expect(getMockGMSClient().getMembership("GROUP1", Role.ADMIN)).andReturn(testGroup).once();
 
         replay(getMockGMSClient());
 
@@ -132,10 +134,10 @@ public class GroupAdminListResourceTest extends AbstractResourceTest<GroupAdminL
         // that the last one is a GROUP entry.
         final String resultCSV = writer.toString();
         final String expectedCSV =
-            "ID,Name,AdminID,Type,OwnerRights\n"
-                + "GROUP1,CADC Test,CADCtest,USER,true\n"
-                + "GROUP1,Marty McFly,at88mph,USER,true\n"
-                + "GROUP1,All members of Supers,Supers,GROUP,true\n";
+            "ID,Name,AdminID,Type,OwnerRights,AdminRights\n"
+                + "GROUP1,CADC Test,CADCtest,USER,false,true\n"
+                + "GROUP1,Marty McFly,at88mph,USER,false,true\n"
+                + "GROUP1,All members of Supers,Supers,GROUP,false,true\n";
 
         assertEquals("Wrong CSV", expectedCSV, resultCSV);
 
@@ -200,6 +202,7 @@ public class GroupAdminListResourceTest extends AbstractResourceTest<GroupAdminL
 
         expect(getMockGMSClient().getGroup("GROUP1")).andReturn(testGroup)
                                                      .once();
+        expect(getMockGMSClient().getMembership("GROUP1", Role.ADMIN)).andReturn(null).once();
 
         replay(getMockGMSClient());
 
@@ -212,10 +215,10 @@ public class GroupAdminListResourceTest extends AbstractResourceTest<GroupAdminL
         final JSONObject expectedJSONObject =
             new JSONObject(
                 "{\"groupName\":\"GROUP1\", \"groupRole\":\"\" ,\"admins\":[{\"id\":\"CADCtest\"," +
-                    "\"username\":\"CADCtest\",\"name\":\"CADC Test\",\"type\":\"USER\",\"OwnerRights\":\"false\"}," +
+                    "\"username\":\"CADCtest\",\"name\":\"CADC Test\",\"type\":\"USER\",\"AdminRights\":\"false\"}," +
                     "{\"id\":\"at88mph\",\"username\":\"at88mph\",\"name\":\"Marty McFly\",\"type\":\"USER\"," +
-                    "\"OwnerRights\":\"false\"},{\"description\":null,\"name\":\"Supers\",\"type\":\"GROUP\"," +
-                    "\"OwnerRights\":\"false\"}]}");
+                    "\"AdminRights\":\"false\"},{\"description\":null,\"name\":\"Supers\",\"type\":\"GROUP\"," +
+                    "\"AdminRights\":\"false\"}]}");
 
         JSONAssert.assertEquals(expectedJSONObject, resultJSONObject, false);
 

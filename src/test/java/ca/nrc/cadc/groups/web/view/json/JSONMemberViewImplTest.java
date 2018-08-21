@@ -31,6 +31,7 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.view.json;
 
 import java.io.StringWriter;
@@ -39,6 +40,7 @@ import java.io.Writer;
 import org.json.JSONWriter;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 import ca.nrc.cadc.ac.PersonalDetails;
@@ -46,23 +48,21 @@ import ca.nrc.cadc.ac.User;
 import ca.nrc.cadc.groups.AbstractGroupsWebTest;
 
 
-public class JSONMemberViewImplTest
-        extends AbstractGroupsWebTest<JSONMemberViewImpl>
-{
+public class JSONMemberViewImplTest extends AbstractGroupsWebTest<JSONMemberViewImpl> {
     @Test
-    public void writeMember() throws Exception
-    {
+    public void writeMember() {
         final Writer writer = new StringWriter();
         final JSONWriter jsonWriter = new JSONWriter(writer);
         final User user = testOwner;
 
         user.personalDetails = new PersonalDetails("CADC", "Test");
 
-        setTestSubject(new JSONMemberViewImpl(jsonWriter, false));
+        setTestSubject(new JSONMemberViewImpl(jsonWriter, false, false));
 
         getTestSubject().write(user);
 
-        assertEquals("Wrong JSON for a Member.", "{\"id\":\"owner\",\"username\":\"owner\",\"name\":\"CADC Test\",\"type\":\"USER\",\"OwnerRights\":\"false\"}",
+        assertEquals("Wrong JSON for a Member.", "{\"id\":\"owner\",\"username\":\"owner\",\"name\":\"CADC Test\"," +
+                         "\"type\":\"USER\",\"OwnerRights\":\"false\",\"AdminRights\":\"false\"}",
                      writer.toString());
     }
 }

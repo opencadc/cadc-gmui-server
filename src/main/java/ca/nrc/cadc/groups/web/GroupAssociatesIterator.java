@@ -77,49 +77,43 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class GroupAssociatesIterator implements Iterator<List<Object>>
-{
+public class GroupAssociatesIterator implements Iterator<List<Object>> {
     private final boolean[] currentIteratorIsUserContainer =
-            new boolean[]{true};
+        new boolean[] {true};
 
     private final Iterator<User> userIterator;
     private final Iterator<Group> groupIterator;
     private final GroupURI groupID;
     private final boolean hasOwnerRights;
+    private final boolean hasAdminRights;
 
 
     public GroupAssociatesIterator(final Iterator<User> userIterator,
                                    final Iterator<Group> groupIterator,
                                    final GroupURI groupID,
-                                   final boolean hasOwnerRights)
-    {
+                                   final boolean hasOwnerRights,
+                                   final boolean hasAdminRights) {
         this.userIterator = userIterator;
         this.groupIterator = groupIterator;
         this.groupID = groupID;
         this.hasOwnerRights = hasOwnerRights;
+        this.hasAdminRights = hasAdminRights;
     }
 
 
     @Override
-    public boolean hasNext()
-    {
+    public boolean hasNext() {
         final boolean n;
 
-        if (currentIteratorIsUserContainer[0])
-        {
-            if (userIterator.hasNext())
-            {
+        if (currentIteratorIsUserContainer[0]) {
+            if (userIterator.hasNext()) {
                 n = true;
-            }
-            else
-            {
+            } else {
                 currentIteratorIsUserContainer[0] =
-                        false;
+                    false;
                 n = hasNext();
             }
-        }
-        else
-        {
+        } else {
             n = groupIterator.hasNext();
         }
 
@@ -127,27 +121,23 @@ public class GroupAssociatesIterator implements Iterator<List<Object>>
     }
 
     @Override
-    public List<Object> next()
-    {
+    public List<Object> next() {
         final List<Object> row = new ArrayList<>();
         final String nextID;
         final String nextType;
 
         row.add(groupID.getName());
 
-        if (currentIteratorIsUserContainer[0])
-        {
+        if (currentIteratorIsUserContainer[0]) {
             final User nextUser =
-                    userIterator.next();
+                userIterator.next();
 
             row.add(nextUser.personalDetails.getFirstName() + " "
-                    + nextUser.personalDetails.getLastName());
+                        + nextUser.personalDetails.getLastName());
 
             nextID = nextUser.getHttpPrincipal().getName();
             nextType = "USER";
-        }
-        else
-        {
+        } else {
             nextID = groupIterator.next().getID().getName();
             nextType = "GROUP";
             row.add("All members of " + nextID);
@@ -156,19 +146,16 @@ public class GroupAssociatesIterator implements Iterator<List<Object>>
         row.add(nextID);
         row.add(nextType);
         row.add(hasOwnerRights);
+        row.add(hasAdminRights);
 
         return row;
     }
 
     @Override
-    public void remove()
-    {
-        if (currentIteratorIsUserContainer[0])
-        {
+    public void remove() {
+        if (currentIteratorIsUserContainer[0]) {
             userIterator.remove();
-        }
-        else
-        {
+        } else {
             groupIterator.remove();
         }
     }

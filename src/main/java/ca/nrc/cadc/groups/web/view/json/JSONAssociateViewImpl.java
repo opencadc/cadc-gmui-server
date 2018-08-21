@@ -43,7 +43,7 @@ public class JSONAssociateViewImpl extends AbstractJSONViewImpl<Associate>
 {
     public JSONAssociateViewImpl(final JSONWriter jsonWriter)
     {
-        super(jsonWriter, JSONViewType.OBJECT, false);
+        super(jsonWriter, JSONViewType.OBJECT, false, false);
     }
 
 

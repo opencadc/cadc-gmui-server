@@ -31,6 +31,7 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.restlet.resources;
 
 import java.io.IOException;
@@ -46,7 +47,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 
 import ca.nrc.cadc.ac.*;
-import ca.nrc.cadc.groups.web.IllegalInputException;
 import ca.nrc.cadc.groups.web.view.GMSView;
 import ca.nrc.cadc.groups.web.view.json.JSONGroupViewImpl;
 
@@ -58,8 +58,7 @@ import ca.nrc.cadc.groups.web.view.json.JSONGroupViewImpl;
  * POST - Update this Group's Description.
  * GET - Get this Group's details.
  */
-public class GroupResource extends AbstractResource
-{
+public class GroupResource extends AbstractResource {
     final static String GROUP_NAME_FIELD = "group-name";
     final static String GROUP_DESCRIPTION_FIELD = "group-description";
 
@@ -72,25 +71,20 @@ public class GroupResource extends AbstractResource
      * @throws java.io.IOException                   Server error.
      */
     @Get("json")
-    public Representation represent() throws Exception
-    {
+    public Representation represent() throws Exception {
         final Group group = getGroup();
         final boolean hasOwnerRights = currentUserHasOwnerRights(group);
+        final boolean hasAdminRights = currentUserHasAdminRights(group);
 
-        return new WriterRepresentation(MediaType.APPLICATION_JSON)
-        {
+        return new WriterRepresentation(MediaType.APPLICATION_JSON) {
             @Override
-            public void write(final Writer writer) throws IOException
-            {
+            public void write(final Writer writer) throws IOException {
                 final JSONWriter jsonWriter = new JSONWriter(writer);
                 final GMSView<Group> view =
-                        new JSONGroupViewImpl(jsonWriter, hasOwnerRights);
-                try
-                {
+                    new JSONGroupViewImpl(jsonWriter, hasOwnerRights, hasAdminRights);
+                try {
                     view.write(group);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     throw new IOException(e);
                 }
             }
@@ -108,9 +102,8 @@ public class GroupResource extends AbstractResource
      */
     @Post
     public void accept(final Representation entity)
-            throws GroupNotFoundException, UserNotFoundException,
-                   WriterException, IOException
-    {
+        throws GroupNotFoundException, UserNotFoundException,
+        WriterException, IOException {
         final Form form = getForm(entity);
         update(form);
     }
@@ -123,10 +116,9 @@ public class GroupResource extends AbstractResource
      * @throws java.io.IOException                   Server error.
      */
     void update(final Form form) throws GroupNotFoundException,
-                                        UserNotFoundException,
-                                        WriterException,
-                                        IOException
-    {
+        UserNotFoundException,
+        WriterException,
+        IOException {
         final Group group = getGroup();
         updateGroup(group, form);
         getGMSClient().updateGroup(group);
@@ -139,8 +131,7 @@ public class GroupResource extends AbstractResource
      * @throws java.io.IOException                   Server error.
      */
     @Delete
-    public void remove() throws GroupNotFoundException, IOException
-    {
+    public void remove() throws GroupNotFoundException, IOException {
         getGMSClient().deleteGroup(getGroupName());
     }
 
@@ -151,9 +142,7 @@ public class GroupResource extends AbstractResource
      * @param group The Group to build up.
      * @param form  The form submitted.
      */
-    private void updateGroup(final Group group, final Form form)
-            throws IllegalInputException
-    {
+    private void updateGroup(final Group group, final Form form) {
         group.description = form.getFirstValue(GROUP_DESCRIPTION_FIELD);
     }
 }

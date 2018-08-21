@@ -31,6 +31,7 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.view.json;
 
 import ca.nrc.cadc.ac.Group;
@@ -40,37 +41,32 @@ import org.json.JSONException;
 import org.json.JSONWriter;
 
 
-public class JSONGroupViewImpl extends AbstractJSONViewImpl<Group>
-{
+public class JSONGroupViewImpl extends AbstractJSONViewImpl<Group> {
     /**
      * JSON View of a Group.
      *
-     * @param jsonWriter        The JSONWriter to write to.
-     * @param hasOwnerRights     Whether the receiving user has admin
-     *                           privileges.
+     * @param jsonWriter     The JSONWriter to write to.
+     * @param hasOwnerRights Whether the receiving user is the owner.
+     * @param hasAdminRights Whether the receiving user has administrative privileges.
      */
-    public JSONGroupViewImpl(final JSONWriter jsonWriter,
-                             final boolean hasOwnerRights)
-    {
-        super(jsonWriter, JSONViewType.OBJECT, hasOwnerRights);
+    public JSONGroupViewImpl(final JSONWriter jsonWriter, final boolean hasOwnerRights, boolean hasAdminRights) {
+        super(jsonWriter, JSONViewType.OBJECT, hasOwnerRights, hasAdminRights);
     }
 
 
     /**
      * Write the Group JSON contents.
      *
-     * @param group         The item to write.
+     * @param group The item to write.
      * @throws org.json.JSONException Any JSON writing exceptions.
      */
     @Override
-    void writeJSON(final Group group) throws JSONException
-    {
+    void writeJSON(final Group group) throws JSONException {
         write("name", group.getID().getName());
 
         final User groupOwner = group.getOwner();
 
-        if (groupOwner != null)
-        {
+        if (groupOwner != null) {
             write("owner_name", UserInfoParser.getFullName(groupOwner));
         }
 

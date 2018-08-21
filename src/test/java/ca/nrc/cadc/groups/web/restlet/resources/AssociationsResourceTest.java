@@ -138,8 +138,9 @@ public class AssociationsResourceTest
         final JSONObject resultJSONObject = new JSONObject(writer.toString());
         final JSONObject expectedJSONObject =
             new JSONObject(
-                "{\"matches\": [{\"id\":\"CADCtest - CADCtest User\",\"type\":\"USER\",\"OwnerRights\":\"false\"},"
-                    + "{\"id\":\"Temps\",\"type\":\"GROUP\",\"OwnerRights\":\"false\"}]}");
+                "{\"matches\": [{\"id\":\"CADCtest - CADCtest User\",\"type\":\"USER\",\"OwnerRights\":\"false\"," +
+                    "\"AdminRights\":\"false\"},"
+                    + "{\"id\":\"Temps\",\"type\":\"GROUP\",\"OwnerRights\":\"false\",\"AdminRights\":\"false\"}]}");
 
         JSONAssert.assertEquals(expectedJSONObject, resultJSONObject, true);
 
@@ -226,8 +227,8 @@ public class AssociationsResourceTest
         final JSONObject resultJSONObject = new JSONObject(writer.toString());
         final JSONObject expectedJSONObject =
             new JSONObject(
-                "{\"matches\": [{\"id\":\"CADCtest - CADCtest User\",\"type\":\"USER\",\"OwnerRights\":\"false\"}]," +
-                    "\"remaining\":1}");
+                "{\"matches\": [{\"id\":\"CADCtest - CADCtest User\",\"type\":\"USER\",\"OwnerRights\":\"false\"," +
+                    "\"AdminRights\":\"false\"}],\"remaining\":1}");
 
         JSONAssert.assertEquals(expectedJSONObject, resultJSONObject, true);
 

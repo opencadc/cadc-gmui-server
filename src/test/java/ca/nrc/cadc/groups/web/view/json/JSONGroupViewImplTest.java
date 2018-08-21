@@ -31,6 +31,7 @@
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  ************************************************************************
  */
+
 package ca.nrc.cadc.groups.web.view.json;
 
 
@@ -44,28 +45,27 @@ import ca.nrc.cadc.groups.web.WebGroupURI;
 import ca.nrc.cadc.util.ObjectUtil;
 import org.json.JSONWriter;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 
-public class JSONGroupViewImplTest
-        extends AbstractGroupsWebTest<JSONGroupViewImpl>
-{
+public class JSONGroupViewImplTest extends AbstractGroupsWebTest<JSONGroupViewImpl> {
     @Test
-    public void writeGroup() throws Exception
-    {
+    public void writeGroup() {
         final Group testGroup =
-                new Group(new WebGroupURI("MYGROUP"));
+            new Group(new WebGroupURI("MYGROUP"));
         ObjectUtil.setField(testGroup, testOwner, "owner");
         final Writer writer = new StringWriter();
         final JSONWriter jsonWriter = new JSONWriter(writer);
 
         testGroup.description = "MY GROUP DESCRIPTION.";
 
-        setTestSubject(new JSONGroupViewImpl(jsonWriter, true));
+        setTestSubject(new JSONGroupViewImpl(jsonWriter, true, true));
 
         getTestSubject().write(testGroup);
 
-        assertEquals("JSON is wrong.", "{\"name\":\"MYGROUP\",\"owner_name\":\"CADC Test\",\"description\":\"MY GROUP DESCRIPTION.\",\"type\":\"GROUP\",\"OwnerRights\":\"true\"}",
+        assertEquals("JSON is wrong.", "{\"name\":\"MYGROUP\",\"owner_name\":\"CADC Test\",\"description\":\"MY GROUP" +
+                         " DESCRIPTION.\",\"type\":\"GROUP\",\"OwnerRights\":\"true\",\"AdminRights\":\"true\"}",
                      writer.toString());
     }
 }

@@ -40,6 +40,7 @@ import java.security.AccessController;
 
 import javax.security.auth.Subject;
 
+import ca.nrc.cadc.ac.Role;
 import ca.nrc.cadc.ac.UserNotFoundException;
 import ca.nrc.cadc.ac.client.UserClient;
 import ca.nrc.cadc.auth.IdentityType;
@@ -127,8 +128,13 @@ public abstract class AbstractResource extends ServerResource {
         return getUserClient().whoAmI();
     }
 
-    final boolean currentUserHasOwnerRights(final Group group)
+    final boolean currentUserHasAdminRights(final Group group)
         throws IOException, UserNotFoundException {
+        return currentUserHasOwnerRights(group)
+            || (getGMSClient().getMembership(group.getID().getName(), Role.ADMIN) != null);
+    }
+
+    final boolean currentUserHasOwnerRights(final Group group) throws IOException, UserNotFoundException {
         final User currentUser = getCurrentUser();
         return currentUser.equals(group.getOwner());
     }
@@ -196,7 +202,7 @@ public abstract class AbstractResource extends ServerResource {
             // Group names are parsed from the All members of prefix, where as
             // User names are parsed from the front of the string.
             if (associateType == AssociateType.GROUP) {
-                name = principalName.substring(GROUP_NAME_PREFIX.length(), principalName.length());
+                name = principalName.substring(GROUP_NAME_PREFIX.length());
             } else {
                 final int spaceDelimiterIndex = principalName.trim().indexOf(" ");
 

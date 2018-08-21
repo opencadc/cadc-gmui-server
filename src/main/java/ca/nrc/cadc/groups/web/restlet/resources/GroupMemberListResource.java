@@ -69,6 +69,7 @@ public class GroupMemberListResource extends AbstractResource {
     public Representation representCSV() throws Exception {
         final Group group = getGroup();
         final boolean hasOwnerRights = currentUserHasOwnerRights(group);
+        final boolean hasAdminRights = currentUserHasAdminRights(group);
 
         return new WriterRepresentation(MediaType.TEXT_CSV) {
             @Override
@@ -90,6 +91,7 @@ public class GroupMemberListResource extends AbstractResource {
 
                 // Used internally.
                 tab.getFields().add(new VOTableField("OwnerRights", "char"));
+                tab.getFields().add(new VOTableField("AdminRights", "char"));
 
                 tab.setTableData(new TableData() {
                     /**
@@ -126,7 +128,8 @@ public class GroupMemberListResource extends AbstractResource {
                         final Iterator<User> userIterator = sortedUserMembers.iterator();
                         final Iterator<Group> groupIterator = sortedGroupMembers.iterator();
 
-                        return new GroupAssociatesIterator(userIterator, groupIterator, group.getID(), hasOwnerRights);
+                        return new GroupAssociatesIterator(userIterator, groupIterator, group.getID(),
+                                                           hasOwnerRights, hasAdminRights);
                     }
                 });
 
@@ -146,6 +149,7 @@ public class GroupMemberListResource extends AbstractResource {
     public Representation representJSON() throws GroupNotFoundException, UserNotFoundException, IOException {
         final Group group = getGroup();
         final boolean hasOwnerRights = currentUserHasOwnerRights(group);
+        final boolean hasAdminRights = currentUserHasAdminRights(group);
 
         return new WriterRepresentation(MediaType.APPLICATION_JSON) {
             @Override
@@ -156,7 +160,7 @@ public class GroupMemberListResource extends AbstractResource {
                     jsonWriter.object();
                     jsonWriter.key("groupName").value(group.getID().getName());
                     jsonWriter.key("members");
-                    writeMembers(jsonWriter, group, hasOwnerRights);
+                    writeMembers(jsonWriter, group, hasOwnerRights, hasAdminRights);
                     jsonWriter.endObject();
                 } catch (JSONException e) {
                     throw new IOException(e);
@@ -165,17 +169,18 @@ public class GroupMemberListResource extends AbstractResource {
         };
     }
 
-    private void writeMembers(final JSONWriter jsonWriter, final Group group, final boolean hasOwnerRights)
+    private void writeMembers(final JSONWriter jsonWriter, final Group group,
+                              final boolean hasOwnerRights, final boolean hasAdminRights)
         throws JSONException {
         jsonWriter.array();
 
         try {
             for (final User userMember : group.getUserMembers()) {
-                new JSONMemberViewImpl(jsonWriter, hasOwnerRights).write(userMember);
+                new JSONMemberViewImpl(jsonWriter, hasOwnerRights, hasAdminRights).write(userMember);
             }
 
             for (final Group groupMember : group.getGroupMembers()) {
-                new JSONGroupViewImpl(jsonWriter, hasOwnerRights).write(groupMember);
+                new JSONGroupViewImpl(jsonWriter, hasOwnerRights, hasAdminRights).write(groupMember);
             }
         } finally {
             jsonWriter.endArray();
