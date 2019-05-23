@@ -1194,7 +1194,7 @@
                 suggestionKeys.push(display)
               })
             } else {
-              setAutocompleteMessageText('No User or Group with that name.')
+              setAutocompleteMessageText('No Group with that name.')
             }
 
             // Pass array to

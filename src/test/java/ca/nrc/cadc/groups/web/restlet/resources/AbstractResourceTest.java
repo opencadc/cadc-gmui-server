@@ -61,9 +61,4 @@ public abstract class AbstractResourceTest<T extends AbstractResource>
         return mockForm;
     }
 
-    public UserClient getMockUserClient()
-    {
-        return mockUserClient;
-    }
-
 }

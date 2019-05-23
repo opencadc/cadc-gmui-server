@@ -36,6 +36,7 @@ package ca.nrc.cadc.groups.web.restlet.resources;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.util.*;
 
 import ca.nrc.cadc.groups.web.GroupAssociatesIterator;
@@ -193,8 +194,12 @@ public class GroupAdminListResource extends AbstractResource {
     }
 
     @Post
-    public void accept(final Representation entity) throws GroupNotFoundException, UserNotFoundException,
-        WriterException, IOException {
+    public void accept(final Representation entity) throws GroupNotFoundException,
+        UserNotFoundException,
+        WriterException,
+        IOException,
+        ReaderException,
+        URISyntaxException {
         final Associate associate = getAssociate(entity);
         final Group group = getGroup();
 

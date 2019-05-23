@@ -40,7 +40,6 @@ import java.util.List;
 
 import ca.nrc.cadc.ac.PersonalDetails;
 import ca.nrc.cadc.ac.User;
-import ca.nrc.cadc.ac.client.UserClient;
 import ca.nrc.cadc.auth.HttpPrincipal;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -81,12 +80,11 @@ public class AssociationsResourceTest
         groupNameResults.add("TimeTravellers");
         groupNameResults.add("Temps");
 
-        expect(getMockUserClient().getDisplayUsers()).andReturn(listResults).times(1);
         expect(getMockGMSClient().getGroupNames()).andReturn(groupNameResults).once();
 
         expect(mockQueryForm.getFirstValue("q")).andReturn("te").once();
 
-        replay(mockQueryForm, getMockGMSClient(), getMockUserClient());
+        replay(mockQueryForm, getMockGMSClient());
 
         setTestSubject(
             new AssociationsResource(new RegexSuggesterImpl<>(
@@ -118,11 +116,6 @@ public class AssociationsResourceTest
                 }
 
                 @Override
-                public UserClient getUserClient() {
-                    return getMockUserClient();
-                }
-
-                @Override
                 Subject getAuthorizedUser() {
                     return new Subject();
                 }
@@ -136,15 +129,14 @@ public class AssociationsResourceTest
         rep.write(writer);
 
         final JSONObject resultJSONObject = new JSONObject(writer.toString());
+
         final JSONObject expectedJSONObject =
             new JSONObject(
-                "{\"matches\": [{\"id\":\"CADCtest - CADCtest User\",\"type\":\"USER\",\"OwnerRights\":\"false\"," +
-                    "\"AdminRights\":\"false\"},"
-                    + "{\"id\":\"Temps\",\"type\":\"GROUP\",\"OwnerRights\":\"false\",\"AdminRights\":\"false\"}]}");
+                "{\"matches\": [{\"id\":\"Temps\",\"type\":\"GROUP\",\"OwnerRights\":\"false\",\"AdminRights\":\"false\"}]}");
 
         JSONAssert.assertEquals(expectedJSONObject, resultJSONObject, true);
 
-        verify(mockQueryForm, getMockGMSClient(), getMockUserClient());
+        verify(mockQueryForm, getMockGMSClient());
     }
 
     @Test
@@ -168,13 +160,12 @@ public class AssociationsResourceTest
         groupNameResults.add("TimeTravellers");
         groupNameResults.add("Temps");
 
-        expect(getMockUserClient().getDisplayUsers()).andReturn(listResults).times(1);
         expect(getMockGMSClient().getGroupNames()).andReturn(
             groupNameResults).once();
 
         expect(mockQueryForm.getFirstValue("q")).andReturn("te").once();
 
-        replay(mockQueryForm, getMockGMSClient(), getMockUserClient());
+        replay(mockQueryForm, getMockGMSClient());
 
         setTestSubject(
             new AssociationsResource(new RegexSuggesterImpl<>(
@@ -207,11 +198,6 @@ public class AssociationsResourceTest
                 }
 
                 @Override
-                public UserClient getUserClient() {
-                    return getMockUserClient();
-                }
-
-                @Override
                 Subject getAuthorizedUser() {
                     return new Subject();
                 }
@@ -224,14 +210,18 @@ public class AssociationsResourceTest
 
         rep.write(writer);
 
+
+
         final JSONObject resultJSONObject = new JSONObject(writer.toString());
+        System.out.println(resultJSONObject);
+
         final JSONObject expectedJSONObject =
             new JSONObject(
-                "{\"matches\": [{\"id\":\"CADCtest - CADCtest User\",\"type\":\"USER\",\"OwnerRights\":\"false\"," +
-                    "\"AdminRights\":\"false\"}],\"remaining\":1}");
+                "{\"matches\": [{\"id\":\"Temps\",\"type\":\"GROUP\",\"OwnerRights\":\"false\"," +
+                    "\"AdminRights\":\"false\"}]}");
 
         JSONAssert.assertEquals(expectedJSONObject, resultJSONObject, true);
 
-        verify(mockQueryForm, getMockGMSClient(), getMockUserClient());
+        verify(mockQueryForm, getMockGMSClient());
     }
 }

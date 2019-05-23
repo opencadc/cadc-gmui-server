@@ -2,7 +2,7 @@
  ************************************************************************
  ****  C A N A D I A N   A S T R O N O M Y   D A T A   C E N T R E  *****
  *
- * (c) 2014.                         (c) 2014.
+ * (c) 2019.                         (c) 2019.
  * National Research Council            Conseil national de recherches
  * Ottawa, Canada, K1A 0R6              Ottawa, Canada, K1A 0R6
  * All rights reserved                  Tous droits reserves
@@ -23,8 +23,6 @@
  *                                      sation du logiciel.
  *
  *
- * @author jenkinsd
- * 10/15/14 - 1:34 PM
  *
  *
  *
@@ -39,14 +37,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.security.PrivilegedAction;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-import ca.nrc.cadc.ac.User;
 import ca.nrc.cadc.auth.SSLUtil;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -119,21 +113,6 @@ public class AssociationsResource extends AbstractResource {
 
         try {
             final Set<Associate> tempSet = new HashSet<>();
-
-            for (final User u : getUserClient().getDisplayUsers()) {
-                @SuppressWarnings("unchecked") final String username = u.getHttpPrincipal().getName();
-
-                final String displayName;
-                if (u.personalDetails == null) {
-                    displayName = null;
-                } else {
-                    displayName = u.personalDetails.getFirstName() + " " +
-                        u.personalDetails.getLastName();
-                }
-
-                tempSet.add(new Associate(username + ((displayName == null)
-                    ? "" : (" - " + displayName)), AssociateType.USER));
-            }
 
             for (final String groupName : getGMSClient().getGroupNames()) {
                 tempSet.add(new Associate(groupName, AssociateType.GROUP));
