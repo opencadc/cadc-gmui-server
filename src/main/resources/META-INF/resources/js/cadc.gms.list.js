@@ -821,6 +821,13 @@
         var $thisFormInput = $thisForm.find('input.assoc-search')
         var type = $thisFormInput.data('assoc-type')
 
+        // Temporary while usernames are not included in autocomplete.
+        // 'type' value will be 'GROUP' or undefined, so default to 'USER'
+        // so this function can continue
+        if (typeof type == 'undefined') {
+          type = 'USER'
+        }
+
         if (type) {
           $thisForm.find("input[name='assoc-type']").val(type)
           $thisContainer.find(LOADER_CONTAINER_SELECTOR).show()
@@ -1194,12 +1201,14 @@
                 suggestionKeys.push(display)
               })
             } else {
-              setAutocompleteMessageText('No Group with that name.')
+              setAutocompleteMessageText('No Group with that name. Assuming it\'s a user name.')
             }
 
             // Pass array to
             // callback
             callback(suggestionKeys)
+          }).fail(function() {
+            console.log( "unable to query server for group name list" );
           })
         },
         select: function(event, ui) {
