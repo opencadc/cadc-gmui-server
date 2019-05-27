@@ -60,7 +60,7 @@
               details_form_group_admins_label: 'Administrators of {1}',
               details_form_group_search_placeholder_members: 'Enter a name',
               details_form_group_search_placeholder_admins: 'Enter a name',
-              details_form_add_members_button: 'Add member',
+              details_form_add_members_button: 'Add User',
               details_form_add_admins_button: 'Add administrator',
               details_form_submit_button_update: 'Update',
               details_form_submit_button_delete: 'Delete',

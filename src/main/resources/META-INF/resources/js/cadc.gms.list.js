@@ -819,7 +819,7 @@
         var $thisContainer = $thisForm.parents('div.associates')
         var groupName = $thisContainer.data('group-name')
         var $thisFormInput = $thisForm.find('input.assoc-search')
-        var type = $thisFormInput.data('assoc-type')
+        var type = $thisForm.find("input[name='assoc-type']").val()
 
         if (type) {
           $thisForm.find("input[name='assoc-type']").val(type)
@@ -1155,7 +1155,7 @@
 
       groupManager.getGroups(input, options)
 
-      $('.assoc-search').autocomplete({
+      $('#groups-search').autocomplete({
         // Define the minimum search string length
         // before the suggested values are shown.
         minLength: 2,
@@ -1202,6 +1202,7 @@
             callback(suggestionKeys)
           })
         },
+        /*
         select: function(event, ui) {
           var val = ui.item.value
 
@@ -1214,6 +1215,7 @@
           // This doesn't always get removed properly.
           clearAutompleteLoading($(ui.item))
         }
+        */
       })
     }
 
