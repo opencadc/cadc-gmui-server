@@ -60,7 +60,8 @@
               details_form_group_admins_label: 'Administrators of {1}',
               details_form_group_search_placeholder_members: 'Enter a name',
               details_form_group_search_placeholder_admins: 'Enter a name',
-              details_form_add_members_button: 'Add User',
+              details_form_add_users_button: 'Add User',
+              details_form_add_groups_button: 'Add Group',
               details_form_add_admins_button: 'Add administrator',
               details_form_submit_button_update: 'Update',
               details_form_submit_button_delete: 'Delete',
@@ -124,7 +125,8 @@
               details_form_group_admins_label: 'Administrateurs de {1}',
               details_form_group_search_placeholder_members: 'Entrer un nom',
               details_form_group_search_placeholder_admins: 'Entrer un nom',
-              details_form_add_members_button: 'Ajouter membre',
+              details_form_add_users_button: 'Ajouter un utilisateur',
+              details_form_add_groups_button: 'Ajouter groupe',
               details_form_add_admins_button: 'Ajouter administrateur',
               details_form_submit_button_update: 'Mise à jour',
               details_form_submit_button_delete: 'Effacer',
@@ -479,6 +481,19 @@
         groupName: groupName
       })
     }
+//line 211  on index.jsp: text-danger bg-danger
+    
+    function colorSuccess(){
+
+    	 // $('span.ui-autocomplete-message').text("Success") //.css({"background-color":"#1DE6A0", "color": "black"})
+    	$('span.text-danger').hide()
+    	$('span.text-success').text("success").show()
+    }
+
+    function colorFail(){
+    	$('span.text-success').hide()
+    	$('span.text-danger').show()
+    }
 
     /**
      * Add a member to the Group whose ID matches the given one.
@@ -495,7 +510,8 @@
         _data
       )
         .done(function(data) {
-          memberAdded(data)
+        	colorSuccess()
+            memberAdded(data)
         })
         .fail(function(jqxhr, textStatus, error) {
           var responseText = jqxhr.responseText
@@ -507,7 +523,8 @@
             statusText = 'NO_SUCH_GROUP'
           } else {
             statusText = responseText
-          }
+          } 
+          colorFail()
 
           trigger(cadc.web.gms.events.onMemberAddedError, {
             textStatus: textStatus,

@@ -1194,6 +1194,9 @@
                 suggestionKeys.push(display)
               })
             } else {
+
+            	$('span.text-success').hide()
+            	$('span.text-danger').show()
               setAutocompleteMessageText('No Group with that name.')
             }
 
@@ -1202,20 +1205,20 @@
             callback(suggestionKeys)
           })
         },
-        /*
+       
         select: function(event, ui) {
           var val = ui.item.value
-
-          $(this).data(
-            'assoc-type',
-            val.indexOf('All members of') === 0 ? 'GROUP' : 'USER'
-          )
+          
+          //$(this).data(
+          // 'assoc-type',
+          // val.indexOf('All members of') === 0 ? 'GROUP' : 'USER'
+         // )
           setAutocompleteMessageText('')
 
           // This doesn't always get removed properly.
           clearAutompleteLoading($(ui.item))
         }
-        */
+        
       })
     }
 
