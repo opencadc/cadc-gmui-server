@@ -510,6 +510,14 @@
         _data
       )
         .done(function(data) {
+        	var member_type  = _data.substring(11,16) // 11,16 -> Group
+        	if(member_type==="GROUP") 					  // assoc-type=GROUP&assoc-id=All+members+of+jcmt-variability"
+        	{
+        		$('#add-groups-form').trigger("reset");
+        	}    
+        	else{
+        		$('#add-users-form').trigger("reset");
+        	}
         	colorSuccess()
             memberAdded(data)
         })
