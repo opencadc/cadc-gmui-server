@@ -1186,18 +1186,18 @@
                 setAutocompleteMessageText('')
               }
 
-              // Process
-              // response
+              // Process response
               $.each(data.matches, function(i, suggestionEntry) {
                 var entryID = suggestionEntry.id
                 var entryType = suggestionEntry.type
-                var display
+                //var display
+                var display = entryID
 
-                if (entryType === 'GROUP') {
-                  display = 'All members of ' + entryID
-                } else {
-                  display = entryID
-                }
+                //if (entryType === 'GROUP') {
+                //  display = 'All members of ' + entryID
+                //} else {
+                //  display = entryID
+                //}
 
                 suggestionKeys.push(display)
               })
@@ -1217,7 +1217,10 @@
        
         select: function(event, ui) {
           var val = ui.item.value
-          
+          //$(this).data(
+          //  'assoc-type',
+          //  val.indexOf('All members of') === 0 ? 'GROUP' : 'USER'
+          //)
           setAutocompleteMessageText('')
 
           // This doesn't always get removed properly.

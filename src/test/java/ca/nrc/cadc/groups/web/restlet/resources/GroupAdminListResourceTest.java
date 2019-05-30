@@ -137,7 +137,7 @@ public class GroupAdminListResourceTest extends AbstractResourceTest<GroupAdminL
             "ID,Name,AdminID,Type,OwnerRights,AdminRights\n"
                 + "GROUP1,CADC Test,CADCtest,USER,false,true\n"
                 + "GROUP1,Marty McFly,at88mph,USER,false,true\n"
-                + "GROUP1,All members of Supers,Supers,GROUP,false,true\n";
+                + "GROUP1,Supers,Supers,GROUP,false,true\n";
 
         assertEquals("Wrong CSV", expectedCSV, resultCSV);
 

@@ -48,7 +48,7 @@ public abstract class AbstractResourceTest<T extends AbstractResource>
 {
     private Form mockForm = createMock(Form.class);
     private final GMSClient mockGmsClient = createMock(GMSClient.class);
-    private final UserClient mockUserClient = createMock(UserClient.class);
+//    private final UserClient mockUserClient = createMock(UserClient.class);
 
 
     public GMSClient getMockGMSClient()
