@@ -822,7 +822,7 @@
         var type = $thisForm.find("input[name='assoc-type']").val()
 
         if (type) {
-          $thisForm.find("input[name='assoc-type']").val(type)
+          //$thisForm.find("input[name='assoc-type']").val(type)
           $thisContainer.find(LOADER_CONTAINER_SELECTOR).show()
 
           if ($thisContainer.data('association') === 'members') {
@@ -1089,10 +1089,11 @@
       })
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAddedError, function(
-        e
+        e,
+        data
       ) {
         $editAdminsContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        setAutocompleteMessageText(e.message)
+        setAutocompleteMessageText(data.message)
       })
 
       groupManager.subscribe(
@@ -1155,7 +1156,7 @@
 
       groupManager.getGroups(input, options)
 
-      $('#groups-search').autocomplete({
+      $('div.group-search input[type=text]').autocomplete({
         // Define the minimum search string length
         // before the suggested values are shown.
         minLength: 2,
@@ -1209,10 +1210,6 @@
         select: function(event, ui) {
           var val = ui.item.value
           
-          //$(this).data(
-          // 'assoc-type',
-          // val.indexOf('All members of') === 0 ? 'GROUP' : 'USER'
-         // )
           setAutocompleteMessageText('')
 
           // This doesn't always get removed properly.
