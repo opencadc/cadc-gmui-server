@@ -1183,7 +1183,6 @@
               $.each(data.matches, function(i, suggestionEntry) {
                 var entryID = suggestionEntry.id
                 var entryType = suggestionEntry.type
-                //var display
                 var display = entryID
                 suggestionKeys.push(display)
               })
