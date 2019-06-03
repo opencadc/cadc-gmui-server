@@ -1156,7 +1156,7 @@
 
       groupManager.getGroups(input, options)
 
-      $('div.group-search input[type=text]').autocomplete({
+      $('.group-search').autocomplete({
         // Define the minimum search string length
         // before the suggested values are shown.
         minLength: 2,
@@ -1166,6 +1166,8 @@
           // Reset each time as they type.
           var suggestionKeys = []
 
+      	$('span.text-success').hide()
+      	$('span.text-danger').show()
           // Pass request to server
           $.getJSON(cadc.web.gms.resource + '/associations', {
             q: req.term
@@ -1196,8 +1198,6 @@
               })
             } else {
 
-            	$('span.text-success').hide()
-            	$('span.text-danger').show()
               setAutocompleteMessageText('No Group with that name.')
             }
 

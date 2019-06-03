@@ -497,19 +497,20 @@
         groupName: groupName
       })
     }
-//line 211  on index.jsp: text-danger bg-danger
     
     function resetForm(formType){
-    	if(formType==="member") 					 	//    	var member_type  = data.substring(11,16) // 11,16 -> Group 
+    	if(formType==="member") 					 	
     	{
-    		$('#add-groups-form').trigger("reset");		// for eg- assoc-type=GROUP&assoc-id=All+members+of+jcmt-variability"
+    		$('#add_groups_form').trigger("reset");	
     		 
-    		$('#add-users-form').trigger("reset");
+    		$('#add_users_form').trigger("reset");
     	}    
     	else{
-    		$('#add-user-admins-form').trigger("reset");
-    		$('#add-group-admins-form').trigger("reset");
+    		$('#add_user_admins_form').trigger("reset");
+    		$('#add_group_admins_form').trigger("reset");
     	}
+    	//if($('span.text-success').visible)					// if successful, goes back to red after complete.
+    
     }
     
     function colorSuccess(){
