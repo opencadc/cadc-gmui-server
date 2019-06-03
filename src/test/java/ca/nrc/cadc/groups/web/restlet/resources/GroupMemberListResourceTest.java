@@ -125,11 +125,6 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
         rep.write(writer);
 
         final String resultCSV = writer.toString();
-//        final String expectedCSV =
-//            "ID,Name,MemberID,Type,OwnerRights,AdminRights\n"
-//                + "GROUP1,CADC Test,member1,USER,false,false\n"
-//                + "GROUP1,Marty McFly,member2,USER,false,false\n"
-//                + "GROUP1,All members of TimeTravellers,TimeTravellers,GROUP,false,false\n";
 
         final String expectedCSV =
             "ID,Name,MemberID,Type,OwnerRights,AdminRights\n"

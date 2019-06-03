@@ -821,13 +821,6 @@
         var $thisFormInput = $thisForm.find('input.assoc-search')
         var type = $thisForm.find("input[name='assoc-type']").val()
 
-        // Temporary while usernames are not included in autocomplete.
-        // 'type' value will be 'GROUP' or undefined, so default to 'USER'
-        // so this function can continue
-        if (typeof type == 'undefined') {
-          type = 'USER'
-        }
-
         if (type) {
           //$thisForm.find("input[name='assoc-type']").val(type)
           $thisContainer.find(LOADER_CONTAINER_SELECTOR).show()
@@ -1192,13 +1185,6 @@
                 var entryType = suggestionEntry.type
                 //var display
                 var display = entryID
-
-                //if (entryType === 'GROUP') {
-                //  display = 'All members of ' + entryID
-                //} else {
-                //  display = entryID
-                //}
-
                 suggestionKeys.push(display)
               })
             } else {
