@@ -60,17 +60,13 @@ import ca.nrc.cadc.groups.web.AssociateType;
 
 
 public abstract class AbstractResource extends ServerResource {
-    // Used to parse groups from the form.  A little hacky, but necessary to greatly simplify the UI.
-//    private final static String GROUP_NAME_PREFIX = "All members of ";
     private final static String GROUP_NAME_ATTRIBUTE_KEY = "groupName";
-
 
     /**
      * Constructor
      */
     AbstractResource() {
     }
-
 
     /**
      * Obtain a new Form with the given body.
@@ -199,19 +195,13 @@ public abstract class AbstractResource extends ServerResource {
         final String name;
 
         if (identityType == IdentityType.USERNAME) {
-            // Group names are parsed from the All members of prefix, where as
-            // User names are parsed from the front of the string.
-//            if (associateType == AssociateType.GROUP) {
-//                name = principalName.substring(GROUP_NAME_PREFIX.length());
-//            } else {
-                final int spaceDelimiterIndex = principalName.trim().indexOf(" ");
+            final int spaceDelimiterIndex = principalName.trim().indexOf(" ");
 
-                if (spaceDelimiterIndex > 0) {
-                    name = principalName.substring(0, spaceDelimiterIndex);
-                } else {
-                    name = principalName;
-                }
-//            }
+            if (spaceDelimiterIndex > 0) {
+                name = principalName.substring(0, spaceDelimiterIndex);
+            } else {
+                name = principalName;
+            }
         } else {
             name = principalName;
         }
