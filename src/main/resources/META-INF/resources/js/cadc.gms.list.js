@@ -1056,6 +1056,7 @@
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAdded, function() {
         clearMessageContainer($editAdminsContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getAdmins(
           $editAdminsContainer.data('group-name'),
