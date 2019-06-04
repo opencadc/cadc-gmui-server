@@ -220,9 +220,8 @@
 
     function getErrorMessage(jqXHR, key_append) {
       var statusCode = jqXHR.status
-      //var key = ''  +  (key_append ? key_append : ' ')	// add status code "statusCode +" ?
-
       var key = '' + statusCode + (key_append ? key_append : '')
+
       // Simplify some messages.
       if (statusCode === 404 || statusCode === 400) {
         key += '_' + jqXHR.responseText
@@ -235,7 +234,7 @@
         key += '_' + jqXHR.statusText
       }
 
-       key += '_message'
+      key += '_message'
 
       return translateField(key)
     }
@@ -509,14 +508,13 @@
     }
     
     function resetForm(formType){
-    	if(formType==="member") 					 	
-    	{
-    		$('#add_groups_form').trigger("reset");
-    		$('#add_users_form').trigger("reset");
+    	if(formType === 'member') {
+    		$('#add_groups_form').trigger('reset')
+    		$('#add_users_form').trigger('reset')
     	}    
-    	else{
-    		$('#add_user_admins_form').trigger("reset");
-    		$('#add_group_admins_form').trigger("reset");
+    	else {
+    		$('#add_user_admins_form').trigger('reset')
+    		$('#add_group_admins_form').trigger('reset')
     	}
     }
 
@@ -536,7 +534,7 @@
       )
         .done(function(data) {
             memberAdded(data)
-            resetForm("member")
+            resetForm('member')
         })
         .fail(function(jqxhr, textStatus, error) {
           var responseText = jqxhr.responseText
@@ -599,7 +597,7 @@
       })
         .done(function(message) {
           memberDeleted(_memberID)
-          resetForm("member")
+          resetForm('member')
         })
         .fail(function(xhr, options, error) {
           trigger(cadc.web.gms.events.onMemberDeletedError, {
