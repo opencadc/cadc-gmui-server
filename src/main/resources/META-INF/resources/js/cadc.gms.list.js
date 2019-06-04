@@ -643,14 +643,14 @@
       function setAutocompleteMessageText(_text, msgType) {
         var $msgBar = $('span.ui-autocomplete-message')
         if (msgType === 'error') {
-          $msgBar.addClass("text-danger bg-danger")
-          $msgBar.removeClass("text-success bg-success")
+          $msgBar.addClass('text-danger bg-danger')
+          $msgBar.removeClass('text-success bg-success')
         } else if (msgType === 'success') {
-          $msgBar.removeClass("text-danger bg-danger")
-          $msgBar.addClass("text-success bg-success")
+          $msgBar.removeClass('text-danger bg-danger')
+          $msgBar.addClass('text-success bg-success')
         } else {
-          $msgBar.removeClass("text-danger bg-danger")
-          $msgBar.removeClass("text-success bg-success")
+          $msgBar.removeClass('text-danger bg-danger')
+          $msgBar.removeClass('text-success bg-success')
         }
         $msgBar.text(_text)
 
@@ -1210,7 +1210,7 @@
             // callback
             callback(suggestionKeys)
           }).fail(function() {
-            console.log( "unable to query server for group name list" );
+            console.log( 'unable to query server for group name list' )
           })
         },
        
