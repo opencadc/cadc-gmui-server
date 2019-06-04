@@ -417,9 +417,12 @@
         method: 'DELETE'
       })
         .done(function(message) {
+          colorSuccess()
           adminDeleted(_adminID)
+          resetForm("admin")
         })
         .fail(function(xhr, options, error) {
+          colorFail()
           trigger(cadc.web.gms.events.onAdminDeletedError, {
             textStatus: options,
             error: error,
@@ -601,11 +604,15 @@
       $.ajax({
         url: deleteURL,
         method: 'DELETE'
+        	
       })
         .done(function(message) {
+          colorSuccess()
           memberDeleted(_memberID)
+          resetForm("member")
         })
         .fail(function(xhr, options, error) {
+          colorFail()
           trigger(cadc.web.gms.events.onMemberDeletedError, {
             textStatus: options,
             error: error,
