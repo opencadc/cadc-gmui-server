@@ -653,9 +653,7 @@
           $msgBar.removeClass('text-success bg-success')
         }
         $msgBar.text(_text)
-
       }
-
 
       function clearAutompleteLoading($autocompleteInput) {
         $autocompleteInput.removeClass('ui-autocomplete-loading')
@@ -1054,10 +1052,6 @@
       ) {
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
         setAutocompleteMessageText(data.message, 'error')
-        //$editMembersContainer
-        //  .find('form')
-        //  .find('.form-message')
-        //  .text(data.message)
       })
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAdded, function() {
@@ -1087,6 +1081,7 @@
       groupManager.subscribe(cadc.web.gms.events.onAdminDeleted, function() {
         $editAdminsContainer.find(LOADER_CONTAINER_SELECTOR).hide()
         clearMessageContainer($editAdminsContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getAdmins(
           $editAdminsContainer.data('group-name'),
