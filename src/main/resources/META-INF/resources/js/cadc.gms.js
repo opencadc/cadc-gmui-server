@@ -23,7 +23,8 @@
               '404_message': 'Group or User not found.',
               '404_NO_SUCH_USER_message': 'No such user',
               '404_NO_SUCH_GROUP_message': 'No such group',
-              '404_Member_Not_Found_message': 'Member not found',
+              '404_Member_Not Found_message': 'Member not found',
+              '404_Member_reason': 'Member not found',
               '409_Group_message': 'Group already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
               '409_Group_reason': 'Conflict',
               '409_Admin_reason': 'Conflict',
@@ -66,9 +67,12 @@
               details_form_submit_button_update: 'Update',
               details_form_submit_button_delete: 'Delete',
               details_form_submit_button_create: 'Create',
+              group_not_found: 'No Group with that name.',
+              more_not_shown: ' more not shown here.',
               msg_success: 'Success',
               navigation_menu_header_label: 'Groups',
               navigation_menu_new_group_label: 'New Group'
+
             },
             fr: {
               '400_reason': 'Erreur de demande',
@@ -88,7 +92,8 @@
               '404_message': "Groupe ou Utilisateur n'existe pas.",
               '404_NO_SUCH_USER_message': "Utilisateur n'existe pas",
               '404_NO_SUCH_GROUP_message': "Groupe n'existe pas",
-              '404_Member_Not_Found_message': 'Membre introuvable',
+              '404_Member_Not Found_message': 'Membre introuvable',
+              '404_Member_reason': 'Membre introuvable',
               '409_Group_message': 'Le groupe existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
               '409_Group_reason': 'Contradiction',
               '409_Member_reason': 'Conflict',
@@ -132,6 +137,8 @@
               details_form_submit_button_update: 'Mise à jour',
               details_form_submit_button_delete: 'Effacer',
               details_form_submit_button_create: 'Créer',
+              group_not_found: 'Aucun groupe avec ce nom.',
+              more_not_shown: ' plus non montré',
               msg_success: 'Succès',
               navigation_menu_header_label: 'Groupes',
               navigation_menu_new_group_label: 'Créer une groupe'
@@ -359,7 +366,6 @@
       )
         .done(function(data) {
           adminAdded(data)
-          colorSuccess() 
           resetForm("admin")
         })
         .fail(function(jqxhr, textStatus, error) {
@@ -372,9 +378,7 @@
                 } else {
                   statusText = responseText
                 }
-        	
-          colorFail()
-           	
+
           trigger(cadc.web.gms.events.onAdminAddedError, {
             textStatus: textStatus,
             error: error,
@@ -422,12 +426,10 @@
         method: 'DELETE'
       })
         .done(function(message) {
-          colorSuccess()
           adminDeleted(_adminID)
           resetForm("admin")
         })
         .fail(function(xhr, options, error) {
-          colorFail()
           trigger(cadc.web.gms.events.onAdminDeletedError, {
             textStatus: options,
             error: error,
@@ -509,31 +511,13 @@
     function resetForm(formType){
     	if(formType==="member") 					 	
     	{
-    		$('#add_groups_form').trigger("reset");	
-    		 
+    		$('#add_groups_form').trigger("reset");
     		$('#add_users_form').trigger("reset");
     	}    
     	else{
     		$('#add_user_admins_form').trigger("reset");
     		$('#add_group_admins_form').trigger("reset");
     	}
-    	//if($('span.text-success').visible)					// if successful, goes back to red after complete.
-    
-    }
-    
-    function colorSuccess(message_key){
-    	$('span.text-danger').hide()
-    	$('span.text-success').text(translateField(message_key)).show()
-    }
-
-    function colorFail(message_key){
-    	$('span.text-success').hide()
-    	$('span.text-danger').text(translateField(message_key)).show()
-    }
-
-    function clearMessageBar() {
-      $('span.text-success').hide()
-      $('span.text-danger').hide()
     }
 
     /**
@@ -551,7 +535,6 @@
         _data
       )
         .done(function(data) {
-           	colorSuccess()
             memberAdded(data)
             resetForm("member")
         })
@@ -565,8 +548,7 @@
             statusText = 'NO_SUCH_GROUP'
           } else {
             statusText = responseText
-          } 
-          colorFail()		 
+          }
 
           trigger(cadc.web.gms.events.onMemberAddedError, {
             textStatus: textStatus,
@@ -616,12 +598,10 @@
         	
       })
         .done(function(message) {
-          colorSuccess()
           memberDeleted(_memberID)
           resetForm("member")
         })
         .fail(function(xhr, options, error) {
-          colorFail()
           trigger(cadc.web.gms.events.onMemberDeletedError, {
             textStatus: options,
             error: error,

@@ -640,9 +640,22 @@
         $container.find('#group-' + association).empty()
       }
 
-      function setAutocompleteMessageText(_text) {
-        $('span.ui-autocomplete-message').text(_text)
+      function setAutocompleteMessageText(_text, msgType) {
+        var $msgBar = $('span.ui-autocomplete-message')
+        if (msgType === 'error') {
+          $msgBar.addClass("text-danger bg-danger")
+          $msgBar.removeClass("text-success bg-success")
+        } else if (msgType === 'success') {
+          $msgBar.removeClass("text-danger bg-danger")
+          $msgBar.addClass("text-success bg-success")
+        } else {
+          $msgBar.removeClass("text-danger bg-danger")
+          $msgBar.removeClass("text-success bg-success")
+        }
+        $msgBar.text(_text)
+
       }
+
 
       function clearAutompleteLoading($autocompleteInput) {
         $autocompleteInput.removeClass('ui-autocomplete-loading')
@@ -822,7 +835,6 @@
         var type = $thisForm.find("input[name='assoc-type']").val()
 
         if (type) {
-          //$thisForm.find("input[name='assoc-type']").val(type)
           $thisContainer.find(LOADER_CONTAINER_SELECTOR).show()
 
           if ($thisContainer.data('association') === 'members') {
@@ -989,8 +1001,8 @@
       })
 
       /*
-                       * On update, when the Group is loaded, populate some known fields.
-                       */
+       * On update, when the Group is loaded, populate some known fields.
+       */
       groupManager.subscribe(cadc.web.gms.events.onMembersLoaded, function(
         e,
         data
@@ -1015,6 +1027,7 @@
 
       groupManager.subscribe(cadc.web.gms.events.onMemberAdded, function() {
         clearMessageContainer($editMembersContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getMembers(
           $editMembersContainer.data('group-name'),
@@ -1026,6 +1039,7 @@
       groupManager.subscribe(cadc.web.gms.events.onMemberDeleted, function() {
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
         clearMessageContainer($editMembersContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getMembers(
           $editMembersContainer.data('group-name'),
@@ -1039,10 +1053,11 @@
         data
       ) {
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        $editMembersContainer
-          .find('form')
-          .find('.form-message')
-          .text(data.message)
+        setAutocompleteMessageText(data.message, 'error')
+        //$editMembersContainer
+        //  .find('form')
+        //  .find('.form-message')
+        //  .text(data.message)
       })
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAdded, function() {
@@ -1062,7 +1077,7 @@
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
         clearMessageContainer($editAdminsContainer.find('form'))
 
-        groupManager.getAdmins(
+      groupManager.getAdmins(
           $editAdminsContainer.data('group-name'),
           adminInput,
           adminViewOptions
@@ -1085,7 +1100,7 @@
         data
       ) {
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        setAutocompleteMessageText(data.message)
+        setAutocompleteMessageText(data.message, 'error')
       })
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAddedError, function(
@@ -1093,7 +1108,7 @@
         data
       ) {
         $editAdminsContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        setAutocompleteMessageText(data.message)
+        setAutocompleteMessageText(data.message, 'error')
       })
 
       groupManager.subscribe(
@@ -1166,8 +1181,7 @@
           // Reset each time as they type.
           var suggestionKeys = []
 
-      	$('span.text-success').hide()
-      	$('span.text-danger').show()
+          setAutocompleteMessageText('')
           // Pass request to server
           $.getJSON(cadc.web.gms.resource + '/associations', {
             q: req.term
@@ -1175,7 +1189,7 @@
             if (data.matches.length > 0) {
               if (data.remaining) {
                 setAutocompleteMessageText(
-                  data.remaining + ' more not shown here.'
+                  data.remaining + groupManager.translateField('more_not_shown'), 'success'
                 )
               } else {
                 setAutocompleteMessageText('')
@@ -1189,10 +1203,7 @@
                 suggestionKeys.push(display)
               })
             } else {
-            	$('span.text-success').hide()
-            	$('span.text-danger').show()
-
-              setAutocompleteMessageText('No Group with that name.')
+              setAutocompleteMessageText(groupManager.translateField('group_not_found'), 'error')
             }
 
             // Pass array to
