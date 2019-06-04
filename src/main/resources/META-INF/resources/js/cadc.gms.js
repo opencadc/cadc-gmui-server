@@ -84,10 +84,10 @@
                'Un ou plus de membres ne peuvent pas être ajouter',
               '401_reason': 'Connexion requise',
               '401_message':
-               "Authentification est obligatoire.  S'il vous plais faire connexion.",
+                "Authentification est obligatoire.  S'il vous plais faire connexion.",
               '403_reason': 'Interdit',
               '403_message':
-               'Autorisations insuffisantes, contacter le propriétaire du groupe.',
+                'Autorisations insuffisantes, contacter le propriétaire du groupe.',
               '404_reason': 'Non trouvé',
               '404_message': "Groupe ou Utilisateur n'existe pas.",
               '404_NO_SUCH_USER_message': "Utilisateur n'existe pas",
@@ -98,15 +98,15 @@
               '409_Group_reason': 'Contradiction',
               '409_Member_reason': 'Conflict',
               '409_Member_message':
-               'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
+                'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
               '409_Admin_reason': 'Conflict',
               '409_Admin_message':
-               'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
+                'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
               '500_reason': 'Erreur',
               '500_message': "S'il vous plais essayer encore plus tard.",
               '503_reason': 'Indisponible',
               '503_message':
-               "Le site est indisponible.  S'il vous plais essayer encore plus tard.",
+                "Le site est indisponible.  S'il vous plais essayer encore plus tard.",
               label_required: 'obligatoire',
               delete_group_confirmation_title: 'Effacer la groupe?',
               edit_link: '/fr/groupes/miseajour.html',
