@@ -8,129 +8,133 @@
           i18n: {
             en: {
             	'400_reason': 'Bad request',
-                '400_BAD_GROUP_NAME_message':
-                  'Group name may not contain space ( ), slash (/), escape (\\), or percent (%)',
-                '400_DUPLICATE_MEMBER_message':
-                  'One or more members already exist',
-                '400_BAD_MEMBER_message': 'One or more members cannot be added',
-                '401_reason': 'Login required',
-                '401_message':
-                  'Authentication is required.  Please use the Login link.',
-                '403_reason': 'Forbidden',
-                '403_message':
-                  'Insufficient permissions, please contact the Group owner.',
-                '404_reason': 'Not found',
-                '404_message': 'Group or User not found.',
-                '404_NO_SUCH_USER_message': 'No such user',
-                '404_NO_SUCH_GROUP_message': 'No such group',
-                '409_Group_message': 'Group already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
-                '409_Group_reason': 'Conflict',
-                '409_Admin_reason': 'Conflict',
-                '409_Admin_message':
-                  'Administrator already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
-                '409_Member_reason': 'Conflict',
-                '409_Member_message':
-                  'Member already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
-                '500_reason': 'Server error',
-                '500_message': 'Please try again later.',
-                '503_reason': 'Unavailable',
-                '503_message':
-                  'This site is unavailable.  Please try again later.',
-                label_required: 'required',
-                delete_group_confirmation_title: 'Delete group?',
-                edit_link: '/$1/groups/update.html',
-                edit_link_label: 'Edit',
-                list_header_name: 'Name',
-                list_header_owner_name: 'Owner Name',
-                list_header_description: 'Description',
-                list_header_id: 'ID',
-                list_header_members: 'Members',
-                list_header_member_name: 'Member Name',
-                list_header_remove: 'Remove',
-                list_header_admin_name: 'Name',
-                list_header_admins: 'Administrators',
-                button_close: 'Close',
-                button_reset: 'Reset',
-                button_done: 'Done',
-                button_delete: 'Delete',
-                details_form_group_name_label: 'Name',
-                details_form_owner_name_label: 'Owner Name',
-                details_form_group_description_label: 'Description',
-                details_form_group_members_label: 'Members of {1}',
-                details_form_group_admins_label: 'Administrators of {1}',
-                details_form_group_search_placeholder_members: 'Enter a name',
-                details_form_group_search_placeholder_admins: 'Enter a name',
-                details_form_add_members_button: 'Add member',
-                details_form_add_admins_button: 'Add administrator',
-                details_form_submit_button_update: 'Update',
-                details_form_submit_button_delete: 'Delete',
-                details_form_submit_button_create: 'Create',
-                navigation_menu_header_label: 'Groups',
-                navigation_menu_new_group_label: 'New Group'
+              '400_BAD_GROUP_NAME_message':
+                'Group name may not contain space ( ), slash (/), escape (\\), or percent (%)',
+              '400_DUPLICATE_MEMBER_message':
+                'One or more members already exist',
+              '400_BAD_MEMBER_message': 'One or more members cannot be added',
+              '401_reason': 'Login required',
+              '401_message':
+                'Authentication is required.  Please use the Login link.',
+              '403_reason': 'Forbidden',
+              '403_message':
+                'Insufficient permissions, please contact the Group owner.',
+              '404_reason': 'Not found',
+              '404_message': 'Group or User not found.',
+              '404_NO_SUCH_USER_message': 'No such user',
+              '404_NO_SUCH_GROUP_message': 'No such group',
+              '404_Member_Not_Found_message': 'Member not found',
+              '409_Group_message': 'Group already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
+              '409_Group_reason': 'Conflict',
+              '409_Admin_reason': 'Conflict',
+              '409_Admin_message':
+                'Administrator already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
+              '409_Member_reason': 'Conflict',
+              '409_Member_message':
+                'Member already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
+              '500_reason': 'Server error',
+              '500_message': 'Please try again later.',
+              '503_reason': 'Unavailable',
+              '503_message':
+                'This site is unavailable.  Please try again later.',
+              label_required: 'required',
+              delete_group_confirmation_title: 'Delete group?',
+              edit_link: '/$1/groups/update.html',
+              edit_link_label: 'Edit',
+              list_header_name: 'Name',
+              list_header_owner_name: 'Owner Name',
+              list_header_description: 'Description',
+              list_header_id: 'ID',
+              list_header_members: 'Members',
+              list_header_member_name: 'Member Name',
+              list_header_remove: 'Remove',
+              list_header_admin_name: 'Name',
+              list_header_admins: 'Administrators',
+              button_close: 'Close',
+              button_reset: 'Reset',
+              button_done: 'Done',
+              button_delete: 'Delete',
+              details_form_group_name_label: 'Name',
+              details_form_owner_name_label: 'Owner Name',
+              details_form_group_description_label: 'Description',
+              details_form_group_members_label: 'Members of {1}',
+              details_form_group_admins_label: 'Administrators of {1}',
+              details_form_group_search_placeholder_members: 'Enter a name',
+              details_form_group_search_placeholder_admins: 'Enter a name',
+              details_form_add_members_button: 'Add member',
+              details_form_add_admins_button: 'Add administrator',
+              details_form_submit_button_update: 'Update',
+              details_form_submit_button_delete: 'Delete',
+              details_form_submit_button_create: 'Create',
+              msg_success: 'Success',
+              navigation_menu_header_label: 'Groups',
+              navigation_menu_new_group_label: 'New Group'
             },
             fr: {
-            	 '400_reason': 'Erreur de demande',
-                 '400_BAD_GROUP_NAME_message':
-                   "Nom du groupe ne peut pas contenir d'espace (), barre oblique (/), évasion (\\), ou pourcent (%)",
-                 '400_DUPLICATE_MEMBER_message':
-                   'Un ou plus de membres existe déja',
-                 '400_BAD_MEMBER_message':
-                   'Un ou plus de membres ne peuvent pas être ajouter',
-                 '401_reason': 'Connexion requise',
-                 '401_message':
-                   "Authentification est obligatoire.  S'il vous plais faire connexion.",
-                 '403_reason': 'Interdit',
-                 '403_message':
-                   'Autorisations insuffisantes, contacter le propriétaire du groupe.',
-                 '404_reason': 'Non trouvé',
-                 '404_message': "Groupe ou Utilisateur n'existe pas.",
-                 '404_NO_SUCH_USER_message': "Utilisateur n'existe pas",
-                 '404_NO_SUCH_GROUP_message': "Groupe n'existe pas",
-                 '409_Group_message': 'Le groupe existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
-                 '409_Group_reason': 'Contradiction',
-                 '409_Member_reason': 'Conflict',
-                 '409_Member_message':
-                   'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
-                 '409_Admin_reason': 'Conflict',
-                 '409_Admin_message':
-                   'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',              
-                 '500_reason': 'Erreur',
-                 '500_message': "S'il vous plais essayer encore plus tard.",
-                 '503_reason': 'Indisponible',
-                 '503_message':
-                   "Le site est indisponible.  S'il vous plais essayer encore plus tard.",
-                 label_required: 'obligatoire',
-                 delete_group_confirmation_title: 'Effacer la groupe?',
-                 edit_link: '/fr/groupes/miseajour.html',
-                 edit_link_label: 'Modifier',
-                 list_header_name: 'Nom',
-                 list_header_owner_name: 'Nom du propriétaire',
-                 list_header_description: 'Description',
-                 list_header_id: 'Identifiant',
-                 list_header_no_of_members: 'Nombre de membres',
-                 list_header_members: 'Membres',
-                 list_header_member_name: 'Nom du membre',
-                 list_header_remove: 'Supprimer',
-                 list_header_admin_name: 'Nom',
-                 list_header_admins: 'Administrateurs',
-                 button_close: 'Fermer',
-                 button_reset: 'Réinitialiser',
-                 button_done: 'Complet',
-                 details_form_group_name_label: 'Nom',
-                 details_form_owner_name_label: 'Nom du propriétaire',
-                 details_form_group_description_label: 'Description',
-                 details_form_group_add_me_label: 'Ajoutez-moi comme membre',
-                 details_form_group_members_label: 'Membres de {1}',
-                 details_form_group_admins_label: 'Administrateurs de {1}',
-                 details_form_group_search_placeholder_members: 'Entrer un nom',
-                 details_form_group_search_placeholder_admins: 'Entrer un nom',
-                 details_form_add_members_button: 'Ajouter membre',
-                 details_form_add_admins_button: 'Ajouter administrateur',
-                 details_form_submit_button_update: 'Mise à jour',
-                 details_form_submit_button_delete: 'Effacer',
-                 details_form_submit_button_create: 'Créer',
-                 navigation_menu_header_label: 'Groupes',
-                 navigation_menu_new_group_label: 'Créer une groupe'
+              '400_reason': 'Erreur de demande',
+              '400_BAD_GROUP_NAME_message':
+               "Nom du groupe ne peut pas contenir d'espace (), barre oblique (/), évasion (\\), ou pourcent (%)",
+              '400_DUPLICATE_MEMBER_message':
+               'Un ou plus de membres existe déja',
+              '400_BAD_MEMBER_message':
+               'Un ou plus de membres ne peuvent pas être ajouter',
+              '401_reason': 'Connexion requise',
+              '401_message':
+               "Authentification est obligatoire.  S'il vous plais faire connexion.",
+              '403_reason': 'Interdit',
+              '403_message':
+               'Autorisations insuffisantes, contacter le propriétaire du groupe.',
+              '404_reason': 'Non trouvé',
+              '404_message': "Groupe ou Utilisateur n'existe pas.",
+              '404_NO_SUCH_USER_message': "Utilisateur n'existe pas",
+              '404_NO_SUCH_GROUP_message': "Groupe n'existe pas",
+              '404_Member_Not_Found_message': 'Membre introuvable',
+              '409_Group_message': 'Le groupe existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
+              '409_Group_reason': 'Contradiction',
+              '409_Member_reason': 'Conflict',
+              '409_Member_message':
+               'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
+              '409_Admin_reason': 'Conflict',
+              '409_Admin_message':
+               'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
+              '500_reason': 'Erreur',
+              '500_message': "S'il vous plais essayer encore plus tard.",
+              '503_reason': 'Indisponible',
+              '503_message':
+               "Le site est indisponible.  S'il vous plais essayer encore plus tard.",
+              label_required: 'obligatoire',
+              delete_group_confirmation_title: 'Effacer la groupe?',
+              edit_link: '/fr/groupes/miseajour.html',
+              edit_link_label: 'Modifier',
+              list_header_name: 'Nom',
+              list_header_owner_name: 'Nom du propriétaire',
+              list_header_description: 'Description',
+              list_header_id: 'Identifiant',
+              list_header_no_of_members: 'Nombre de membres',
+              list_header_members: 'Membres',
+              list_header_member_name: 'Nom du membre',
+              list_header_remove: 'Supprimer',
+              list_header_admin_name: 'Nom',
+              list_header_admins: 'Administrateurs',
+              button_close: 'Fermer',
+              button_reset: 'Réinitialiser',
+              button_done: 'Complet',
+              details_form_group_name_label: 'Nom',
+              details_form_owner_name_label: 'Nom du propriétaire',
+              details_form_group_description_label: 'Description',
+              details_form_group_add_me_label: 'Ajoutez-moi comme membre',
+              details_form_group_members_label: 'Membres de {1}',
+              details_form_group_admins_label: 'Administrateurs de {1}',
+              details_form_group_search_placeholder_members: 'Entrer un nom',
+              details_form_group_search_placeholder_admins: 'Entrer un nom',
+              details_form_add_members_button: 'Ajouter membre',
+              details_form_add_admins_button: 'Ajouter administrateur',
+              details_form_submit_button_update: 'Mise à jour',
+              details_form_submit_button_delete: 'Effacer',
+              details_form_submit_button_create: 'Créer',
+              msg_success: 'Succès',
+              navigation_menu_header_label: 'Groupes',
+              navigation_menu_new_group_label: 'Créer une groupe'
             }
           },
           resource: 'service',
@@ -209,21 +213,22 @@
 
     function getErrorMessage(jqXHR, key_append) {
       var statusCode = jqXHR.status
-      var key = ''  +  (key_append ? key_append : ' ')	// add status code "statusCode +" ?
-      														
+      //var key = ''  +  (key_append ? key_append : ' ')	// add status code "statusCode +" ?
+
+      var key = '' + statusCode + (key_append ? key_append : '')
       // Simplify some messages.
       if (statusCode === 404 || statusCode === 400) {
-        key += ' ' + jqXHR.responseText
+        key += '_' + jqXHR.responseText
       } else if (
         statusCode !== 401 &&
         statusCode !== 403 &&
         statusCode !== 409 &&
         statusCode !== 500
       ) {
-        key +=  jqXHR.statusText
+        key += '_' + jqXHR.statusText
       }
 
-       key += ' error'
+       key += '_message'
 
       return translateField(key)
     }
@@ -379,7 +384,7 @@
               status: jqxhr.status,
               responseText: statusText,
               statusText: statusText
-            }, 'Admin')
+            }, '_Admin')
           })
         })
     }
@@ -477,7 +482,7 @@
       subscribe(cadc.web.gms.events.onMembersLoadedError, function(e, data) {
         $('.loader_container').hide()
         alert(
-          'Unable to get members: \nReason:' +
+          'Unable to get group members: \nReason:' +
             data.reason +
             '\nMessage: ' +
             data.message
@@ -497,30 +502,35 @@
         groupName: groupName
       })
     }
-//line 211  on index.jsp: text-danger bg-danger
     
     function resetForm(formType){
-    	if(formType==="member") 					 	//    	var member_type  = data.substring(11,16) // 11,16 -> Group 
+    	if(formType==="member") 					 	
     	{
-    		$('#add-groups-form').trigger("reset");		// for eg- assoc-type=GROUP&assoc-id=All+members+of+jcmt-variability"
+    		$('#add_groups_form').trigger("reset");	
     		 
-    		$('#add-users-form').trigger("reset");
+    		$('#add_users_form').trigger("reset");
     	}    
     	else{
-    		$('#add-user-admins-form').trigger("reset");
-    		$('#add-group-admins-form').trigger("reset");
+    		$('#add_user_admins_form').trigger("reset");
+    		$('#add_group_admins_form').trigger("reset");
     	}
+    	//if($('span.text-success').visible)					// if successful, goes back to red after complete.
+    
     }
     
-    function colorSuccess(){
-
+    function colorSuccess(message_key){
     	$('span.text-danger').hide()
-    	$('span.text-success').text("success").show()
+    	$('span.text-success').text(translateField(message_key)).show()
     }
 
-    function colorFail(){
+    function colorFail(message_key){
     	$('span.text-success').hide()
-    	$('span.text-danger').show()
+    	$('span.text-danger').text(translateField(message_key)).show()
+    }
+
+    function clearMessageBar() {
+      $('span.text-success').hide()
+      $('span.text-danger').hide()
     }
 
     /**
@@ -564,7 +574,7 @@
               status: jqxhr.status,
               responseText: statusText,
               statusText: statusText
-            }, 'Member')
+            }, '_Member')
           })
         })
     }
