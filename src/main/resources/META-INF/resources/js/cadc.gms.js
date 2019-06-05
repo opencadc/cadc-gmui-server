@@ -7,7 +7,7 @@
         gms: {
           i18n: {
             en: {
-              '400_reason': 'Bad request',
+            	'400_reason': 'Bad request',
               '400_BAD_GROUP_NAME_message':
                 'Group name may not contain space ( ), slash (/), escape (\\), or percent (%)',
               '400_DUPLICATE_MEMBER_message':
@@ -19,10 +19,14 @@
               '403_reason': 'Forbidden',
               '403_message':
                 'Insufficient permissions, please contact the Group owner.',
+              '404_Admin_Not Found_message': 'Admin not found.',
+              '404_Admin_reason': 'Admin not found.',
               '404_reason': 'Not found',
               '404_message': 'Group or User not found.',
               '404_NO_SUCH_USER_message': 'No such user',
               '404_NO_SUCH_GROUP_message': 'No such group',
+              '404_Member_Not Found_message': 'Member not found',
+              '404_Member_reason': 'Member not found',
               '409_Group_message': 'Group already exists, or it infringes on an existing Group namespace. (eg. JCMT-, CFHT-)',
               '409_Group_reason': 'Conflict',
               '409_Admin_reason': 'Conflict',
@@ -65,27 +69,36 @@
               details_form_submit_button_update: 'Update',
               details_form_submit_button_delete: 'Delete',
               details_form_submit_button_create: 'Create',
+              fail_get_group_list: 'Unable to query server for group name list.',
+              group_not_found: 'No Group with that name.',
+              more_not_shown: ' more not shown here.',
+              msg_success: 'Success',
               navigation_menu_header_label: 'Groups',
               navigation_menu_new_group_label: 'New Group'
+
             },
             fr: {
               '400_reason': 'Erreur de demande',
               '400_BAD_GROUP_NAME_message':
-                "Nom du groupe ne peut pas contenir d'espace (), barre oblique (/), évasion (\\), ou pourcent (%)",
+               "Nom du groupe ne peut pas contenir d'espace (), barre oblique (/), évasion (\\), ou pourcent (%)",
               '400_DUPLICATE_MEMBER_message':
-                'Un ou plus de membres existe déja',
+               'Un ou plus de membres existe déja',
               '400_BAD_MEMBER_message':
-                'Un ou plus de membres ne peuvent pas être ajouter',
+               'Un ou plus de membres ne peuvent pas être ajouter',
               '401_reason': 'Connexion requise',
               '401_message':
                 "Authentification est obligatoire.  S'il vous plais faire connexion.",
               '403_reason': 'Interdit',
               '403_message':
                 'Autorisations insuffisantes, contacter le propriétaire du groupe.',
+              '404_Admin_Not Found_message': 'Admin non trouvé',
+              '404_Admin_reason': 'Admin non trouvé',
               '404_reason': 'Non trouvé',
               '404_message': "Groupe ou Utilisateur n'existe pas.",
               '404_NO_SUCH_USER_message': "Utilisateur n'existe pas",
               '404_NO_SUCH_GROUP_message': "Groupe n'existe pas",
+              '404_Member_Not Found_message': 'Membre non trouvé',
+              '404_Member_reason': 'Membre non trouvé',
               '409_Group_message': 'Le groupe existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
               '409_Group_reason': 'Contradiction',
               '409_Member_reason': 'Conflict',
@@ -93,7 +106,7 @@
                 'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
               '409_Admin_reason': 'Conflict',
               '409_Admin_message':
-                'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',              
+                'Le membre existe déjà, ou elle porte atteinte à un espace de noms existant. (eg. JCMT-, CFHT-)',
               '500_reason': 'Erreur',
               '500_message': "S'il vous plais essayer encore plus tard.",
               '503_reason': 'Indisponible',
@@ -129,6 +142,10 @@
               details_form_submit_button_update: 'Mise à jour',
               details_form_submit_button_delete: 'Effacer',
               details_form_submit_button_create: 'Créer',
+              fail_get_group_list: 'Impossible de demander au serveur la liste des noms du groupe.',
+              group_not_found: 'Aucun groupe avec ce nom.',
+              more_not_shown: ' plus non montré',
+              msg_success: 'Succès',
               navigation_menu_header_label: 'Groupes',
               navigation_menu_new_group_label: 'Créer une groupe'
             }
@@ -352,16 +369,31 @@
           '/admins',
         _data
       )
-        .done(function(data, textStatus, jqXHR) {
+        .done(function(data) {
           adminAdded(data)
+          resetForm('admin')
         })
         .fail(function(jqxhr, textStatus, error) {
+        	var responseText = jqxhr.responseText
+        	var statusText 
+        	if (responseText.indexOf('NO_SUCH_USER') >= 0) {
+        		statusText = 'NO_SUCH_USER'
+        		} else if (responseText.indexOf('NO_SUCH_GROUP') >= 0) {
+        			statusText = 'NO_SUCH_GROUP'
+                } else {
+                  statusText = responseText
+                }
+
           trigger(cadc.web.gms.events.onAdminAddedError, {
             textStatus: textStatus,
             error: error,
             request: jqxhr,
             reason: getErrorReason(jqxhr.status + '_Admin'),
-            message: getErrorMessage(jqxhr, '_Admin')
+             message: getErrorMessage({
+              status: jqxhr.status,
+              responseText: statusText,
+              statusText: statusText
+            }, '_Admin')
           })
         })
     }
@@ -400,6 +432,7 @@
       })
         .done(function(message) {
           adminDeleted(_adminID)
+          resetForm('admin')
         })
         .fail(function(xhr, options, error) {
           trigger(cadc.web.gms.events.onAdminDeletedError, {
@@ -459,7 +492,7 @@
       subscribe(cadc.web.gms.events.onMembersLoadedError, function(e, data) {
         $('.loader_container').hide()
         alert(
-          'Unable to get members: \nReason:' +
+          'Unable to get group members: \nReason:' +
             data.reason +
             '\nMessage: ' +
             data.message
@@ -479,6 +512,17 @@
         groupName: groupName
       })
     }
+    
+    function resetForm(formType){
+    	if(formType === 'member') {
+    		$('#add_groups_form').trigger('reset')
+    		$('#add_users_form').trigger('reset')
+    	}    
+    	else {
+    		$('#add_user_admins_form').trigger('reset')
+    		$('#add_group_admins_form').trigger('reset')
+    	}
+    }
 
     /**
      * Add a member to the Group whose ID matches the given one.
@@ -495,7 +539,8 @@
         _data
       )
         .done(function(data) {
-          memberAdded(data)
+            memberAdded(data)
+            resetForm('member')
         })
         .fail(function(jqxhr, textStatus, error) {
           var responseText = jqxhr.responseText
@@ -557,6 +602,7 @@
       })
         .done(function(message) {
           memberDeleted(_memberID)
+          resetForm('member')
         })
         .fail(function(xhr, options, error) {
           trigger(cadc.web.gms.events.onMemberDeletedError, {

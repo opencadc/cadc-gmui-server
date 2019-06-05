@@ -140,7 +140,7 @@ public class GroupAssociatesIterator implements Iterator<List<Object>> {
         } else {
             nextID = groupIterator.next().getID().getName();
             nextType = "GROUP";
-            row.add("All members of " + nextID);
+            row.add(nextID);
         }
 
         row.add(nextID);

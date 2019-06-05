@@ -296,19 +296,30 @@
                         <div id="members_grid" class="associate_grid" style="width: 100%;"></div>
                       </div>
 
-                      <form class="form-inline" id="add-members-form" name="add-members-form" action="/gmui/group/" method="post">
+                      <span class="ui-autocomplete-message text-danger bg-danger"></span>
 
-                        <!-- members form -->
+                      <form class="form-inline" id="add_users_form"   name="add-users-form" action="${contextPath}/group/" method="post" >
+                        <!-- user members form -->
                         <div class="form-group">
-                          <input type="hidden" name="assoc-type" />
-                          <span class="ui-autocomplete-message form-message text-danger bg-danger"></span>
-                          <label for="members-search" class="sr-only" id="members-search_label"></label>
-                          <input type="text" id="members-search" name="assoc-id" class="form-control assoc-search" placeholder="Enter a username or Group name"
-                            size="30" />
-                          <button id="add_button_members" type="submit" class="btn btn-primary"></button>
+                          <input type="hidden" name="assoc-type" value = "USER" />
+                          <label for="users-search" class="sr-only" id="users-search_label"></label>
+                          <input type="text" id="users-search" name="assoc-id" class="form-control assoc-search" placeholder="Enter user name"
+                                 size="30" />
+                          <button id="add_button_users" type="submit" class="btn btn-primary">Add user</button>
                         </div>
-
                       </form>
+
+                      <form class="form-inline" id="add_groups_form" name="add-groups-form" action="${contextPath}/group/" method="post" >
+                        <!-- group members form -->
+                        <div class="form-group">
+                          <input type="hidden" name="assoc-type" value ="GROUP" />
+                          <label for="groups-search" class="sr-only" id="groups-search_label"></label>
+                          <input type="text" id="groups-search" name="assoc-id" class="form-control assoc-search group-search" placeholder="Enter group name"
+                                 size="30" />
+                          <button id="add_button_groups" type="submit" class="btn btn-primary">Add group</button>
+                        </div>
+                      </form>
+
                     </div>
                   </div>
                 </div>
@@ -344,18 +355,28 @@
                         <div id="admins_grid" class="associate_grid" style="width: 100%;"></div>
                       </div>
 
-                      <form class="form-inline" id="add-admins-form" name="add-admins-form" action="/gmui/group/" method="post">
+                      <span class="ui-autocomplete-message text-success bg-success"></span>
 
+                      <form class="form-inline" id="add_user_admins_form" name="add-admins-form" action="${contextPath}/group/" method="post">
                         <!-- admins form -->
                         <div class="form-group">
-                          <input type="hidden" name="assoc-type" />
-                          <span class="ui-autocomplete-message form-message text-danger bg-danger"></span>
-                          <label for="admins-search" class="sr-only" id="admins-search_label"></label>
-                          <input type="text" id="admins-search" name="assoc-id" class="form-control assoc-search" placeholder="Enter a username or Group name"
-                            size="30" />
-                          <button id="add_button_admins" type="submit" class="btn btn-primary"></button>
+                          <input type="hidden" name="assoc-type" value = "USER"/>
+                          <label for="admins_user_search" class="sr-only" id="admins_user_search_label"></label>
+                          <input type="text" id="admins_user_search" name="assoc-id" class="form-control assoc-search" placeholder="Enter user name"
+                                 size="30" />
+                          <button id="add_button_user_admins" type="submit" class="btn btn-primary">Add user admin</button>
                         </div>
+                      </form>
 
+                      <form class="form-inline" id="add_group_admins_form" name="add-admins-form" action="${contextPath}/group/" method="post">
+                        <!-- admins form -->
+                        <div class="form-group">
+                          <input type="hidden" name="assoc-type" value = "GROUP"/>
+                          <label for="admins-groups-search" class="sr-only" id="admins_group_search_label"></label>
+                          <input type="text" id="admins-groups-search" name="assoc-id" class="form-control assoc-search group-search" placeholder="Enter group name"
+                                 size="30" />
+                          <button id="add_button_group_admins" type="submit" class="btn btn-primary">Add group admin</button>
+                        </div>
                       </form>
                     </div>
                   </div>

@@ -640,8 +640,19 @@
         $container.find('#group-' + association).empty()
       }
 
-      function setAutocompleteMessageText(_text) {
-        $('span.ui-autocomplete-message').text(_text)
+      function setAutocompleteMessageText(_text, msgType) {
+        var $msgBar = $('span.ui-autocomplete-message')
+        if (msgType === 'error') {
+          $msgBar.addClass('text-danger bg-danger')
+          $msgBar.removeClass('text-success bg-success')
+        } else if (msgType === 'success') {
+          $msgBar.removeClass('text-danger bg-danger')
+          $msgBar.addClass('text-success bg-success')
+        } else {
+          $msgBar.removeClass('text-danger bg-danger')
+          $msgBar.removeClass('text-success bg-success')
+        }
+        $msgBar.text(_text)
       }
 
       function clearAutompleteLoading($autocompleteInput) {
@@ -819,10 +830,9 @@
         var $thisContainer = $thisForm.parents('div.associates')
         var groupName = $thisContainer.data('group-name')
         var $thisFormInput = $thisForm.find('input.assoc-search')
-        var type = $thisFormInput.data('assoc-type')
+        var type = $thisForm.find("input[name='assoc-type']").val()
 
         if (type) {
-          $thisForm.find("input[name='assoc-type']").val(type)
           $thisContainer.find(LOADER_CONTAINER_SELECTOR).show()
 
           if ($thisContainer.data('association') === 'members') {
@@ -989,8 +999,8 @@
       })
 
       /*
-                       * On update, when the Group is loaded, populate some known fields.
-                       */
+       * On update, when the Group is loaded, populate some known fields.
+       */
       groupManager.subscribe(cadc.web.gms.events.onMembersLoaded, function(
         e,
         data
@@ -1015,6 +1025,7 @@
 
       groupManager.subscribe(cadc.web.gms.events.onMemberAdded, function() {
         clearMessageContainer($editMembersContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getMembers(
           $editMembersContainer.data('group-name'),
@@ -1026,6 +1037,7 @@
       groupManager.subscribe(cadc.web.gms.events.onMemberDeleted, function() {
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
         clearMessageContainer($editMembersContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getMembers(
           $editMembersContainer.data('group-name'),
@@ -1039,14 +1051,12 @@
         data
       ) {
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        $editMembersContainer
-          .find('form')
-          .find('.form-message')
-          .text(data.message)
+        setAutocompleteMessageText(data.message, 'error')
       })
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAdded, function() {
         clearMessageContainer($editAdminsContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getAdmins(
           $editAdminsContainer.data('group-name'),
@@ -1062,7 +1072,7 @@
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
         clearMessageContainer($editAdminsContainer.find('form'))
 
-        groupManager.getAdmins(
+      groupManager.getAdmins(
           $editAdminsContainer.data('group-name'),
           adminInput,
           adminViewOptions
@@ -1072,6 +1082,7 @@
       groupManager.subscribe(cadc.web.gms.events.onAdminDeleted, function() {
         $editAdminsContainer.find(LOADER_CONTAINER_SELECTOR).hide()
         clearMessageContainer($editAdminsContainer.find('form'))
+        setAutocompleteMessageText(groupManager.translateField('msg_success'), 'success')
 
         groupManager.getAdmins(
           $editAdminsContainer.data('group-name'),
@@ -1085,14 +1096,15 @@
         data
       ) {
         $editMembersContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        setAutocompleteMessageText(data.message)
+        setAutocompleteMessageText(data.message, 'error')
       })
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAddedError, function(
-        e
+        e,
+        data
       ) {
         $editAdminsContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        setAutocompleteMessageText(e.message)
+        setAutocompleteMessageText(data.message, 'error')
       })
 
       groupManager.subscribe(
@@ -1155,7 +1167,7 @@
 
       groupManager.getGroups(input, options)
 
-      $('.assoc-search').autocomplete({
+      $('.group-search').autocomplete({
         // Define the minimum search string length
         // before the suggested values are shown.
         minLength: 2,
@@ -1165,6 +1177,7 @@
           // Reset each time as they type.
           var suggestionKeys = []
 
+          setAutocompleteMessageText('')
           // Pass request to server
           $.getJSON(cadc.web.gms.resource + '/associations', {
             q: req.term
@@ -1172,48 +1185,39 @@
             if (data.matches.length > 0) {
               if (data.remaining) {
                 setAutocompleteMessageText(
-                  data.remaining + ' more not shown here.'
+                  data.remaining + groupManager.translateField('more_not_shown'), 'success'
                 )
               } else {
                 setAutocompleteMessageText('')
               }
 
-              // Process
-              // response
+              // Process response
               $.each(data.matches, function(i, suggestionEntry) {
                 var entryID = suggestionEntry.id
                 var entryType = suggestionEntry.type
-                var display
-
-                if (entryType === 'GROUP') {
-                  display = 'All members of ' + entryID
-                } else {
-                  display = entryID
-                }
-
+                var display = entryID
                 suggestionKeys.push(display)
               })
             } else {
-              setAutocompleteMessageText('No User or Group with that name.')
+              setAutocompleteMessageText(groupManager.translateField('group_not_found'), 'error')
             }
 
             // Pass array to
             // callback
             callback(suggestionKeys)
+          }).fail(function() {
+            console.log(groupManager.translateField('fail_get_group_list'))
           })
         },
+       
         select: function(event, ui) {
           var val = ui.item.value
-
-          $(this).data(
-            'assoc-type',
-            val.indexOf('All members of') === 0 ? 'GROUP' : 'USER'
-          )
           setAutocompleteMessageText('')
 
           // This doesn't always get removed properly.
           clearAutompleteLoading($(ui.item))
         }
+        
       })
     }
 

@@ -125,11 +125,13 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
         rep.write(writer);
 
         final String resultCSV = writer.toString();
+
         final String expectedCSV =
             "ID,Name,MemberID,Type,OwnerRights,AdminRights\n"
                 + "GROUP1,CADC Test,member1,USER,false,false\n"
                 + "GROUP1,Marty McFly,member2,USER,false,false\n"
-                + "GROUP1,All members of TimeTravellers,TimeTravellers,GROUP,false,false\n";
+                + "GROUP1,TimeTravellers,TimeTravellers,GROUP,false,false\n";
+
 
         assertEquals("Wrong CSV", expectedCSV, resultCSV);
 
@@ -245,8 +247,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         final InputStream input =
             new ByteArrayInputStream(
-                "assoc-id=jenkinsd%20(Dustin)&assoc-type=USER".
-                                                                  getBytes());
+                "assoc-id=jenkinsd&assoc-type=USER".getBytes());
 
         final Representation payload = new StreamRepresentation(MediaType.ALL) {
             @Override
@@ -298,8 +299,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         final InputStream input =
             new ByteArrayInputStream(
-                "assoc-id=jenkinsd%20(Dustin)&assoc-type=USER".
-                                                                  getBytes());
+                "assoc-id=jenkinsd&assoc-type=USER".getBytes());
 
         final Representation payload = new StreamRepresentation(MediaType.ALL) {
             @Override
@@ -355,8 +355,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         final InputStream input =
             new ByteArrayInputStream(
-                "assoc-id=All%20members%20of%20GRPMEM1&assoc-type=GROUP".
-                                                                            getBytes());
+                "assoc-id=GRPMEM1&assoc-type=GROUP".getBytes());
 
         final Representation payload = new StreamRepresentation(MediaType.ALL) {
             @Override
