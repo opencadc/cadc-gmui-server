@@ -192,9 +192,7 @@ public abstract class AbstractResource extends ServerResource {
         final String principalName = form.getFirstValue("assoc-id");
         final String principalType = form.getFirstValue("assoc-type");
         final AssociateType associateType = AssociateType.valueOf(principalType.toUpperCase());
-        final String name = principalName;
-
-        return new Associate(name, associateType);
+        return new Associate(principalName, associateType);
     }
 
     /**
