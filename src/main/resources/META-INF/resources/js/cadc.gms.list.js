@@ -1206,7 +1206,7 @@
             // callback
             callback(suggestionKeys)
           }).fail(function() {
-            console.log( 'unable to query server for group name list' )
+            console.log(groupManager.translateField('fail_get_group_list'))
           })
         },
        

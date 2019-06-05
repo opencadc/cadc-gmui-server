@@ -247,8 +247,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         final InputStream input =
             new ByteArrayInputStream(
-                "assoc-id=jenkinsd%20(Dustin)&assoc-type=USER".
-                                                                  getBytes());
+                "assoc-id=jenkinsd&assoc-type=USER".getBytes());
 
         final Representation payload = new StreamRepresentation(MediaType.ALL) {
             @Override
@@ -300,8 +299,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         final InputStream input =
             new ByteArrayInputStream(
-                "assoc-id=jenkinsd%20(Dustin)&assoc-type=USER".
-                                                                  getBytes());
+                "assoc-id=jenkinsd&assoc-type=USER".getBytes());
 
         final Representation payload = new StreamRepresentation(MediaType.ALL) {
             @Override
@@ -357,8 +355,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         final InputStream input =
             new ByteArrayInputStream(
-                "assoc-id=GRPMEM1&assoc-type=GROUP".
-                                                                            getBytes());
+                "assoc-id=GRPMEM1&assoc-type=GROUP".getBytes());
 
         final Representation payload = new StreamRepresentation(MediaType.ALL) {
             @Override

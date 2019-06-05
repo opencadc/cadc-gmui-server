@@ -69,6 +69,7 @@
               details_form_submit_button_update: 'Update',
               details_form_submit_button_delete: 'Delete',
               details_form_submit_button_create: 'Create',
+              fail_get_group_list: 'Unable to query server for group name list.',
               group_not_found: 'No Group with that name.',
               more_not_shown: ' more not shown here.',
               msg_success: 'Success',
@@ -141,6 +142,7 @@
               details_form_submit_button_update: 'Mise à jour',
               details_form_submit_button_delete: 'Effacer',
               details_form_submit_button_create: 'Créer',
+              fail_get_group_list: 'Impossible de demander au serveur la liste des noms du groupe.',
               group_not_found: 'Aucun groupe avec ce nom.',
               more_not_shown: ' plus non montré',
               msg_success: 'Succès',
@@ -369,7 +371,7 @@
       )
         .done(function(data) {
           adminAdded(data)
-          resetForm("admin")
+          resetForm('admin')
         })
         .fail(function(jqxhr, textStatus, error) {
         	var responseText = jqxhr.responseText
@@ -430,7 +432,7 @@
       })
         .done(function(message) {
           adminDeleted(_adminID)
-          resetForm("admin")
+          resetForm(admin')
         })
         .fail(function(xhr, options, error) {
           trigger(cadc.web.gms.events.onAdminDeletedError, {
@@ -597,7 +599,6 @@
       $.ajax({
         url: deleteURL,
         method: 'DELETE'
-        	
       })
         .done(function(message) {
           memberDeleted(_memberID)
