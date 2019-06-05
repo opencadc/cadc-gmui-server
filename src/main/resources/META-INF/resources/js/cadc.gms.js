@@ -432,7 +432,7 @@
       })
         .done(function(message) {
           adminDeleted(_adminID)
-          resetForm(admin')
+          resetForm('admin')
         })
         .fail(function(xhr, options, error) {
           trigger(cadc.web.gms.events.onAdminDeletedError, {

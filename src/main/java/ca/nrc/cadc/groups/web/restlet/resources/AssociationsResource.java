@@ -67,6 +67,9 @@ public class AssociationsResource extends AbstractResource {
     private final static Set<Associate> ASSOCIATE_CACHE =
                                 Collections.newSetFromMap(new ConcurrentHashMap<Associate, Boolean>());
 
+    // Fifteen minutes.  Used in the Spring configuration.
+    public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 30 * 60 * 1000;
+
     private final Suggester<Associate> suggester;
     private AssociationsCacheState associationsCacheState =
         AssociationsCacheState.INIT;
