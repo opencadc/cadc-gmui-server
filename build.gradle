@@ -20,7 +20,7 @@ dependencies {
     compile 'org.opencadc:cadc-util:[1.1.4, )'
     compile 'org.opencadc:cadc-web-util:[1.0.15, )'
     compile 'org.opencadc:cadc-registry:1.+'
-    compile 'org.opencadc:cadc-access-control:1.+'
+    compile 'org.opencadc:cadc-access-control:1.1.15'
 
     testCompile 'junit:junit:4.+'
     testCompile 'org.skyscreamer:jsonassert:1.+'
@@ -29,4 +29,4 @@ dependencies {
 
 sourceCompatibility = '1.7'
 group = 'org.opencadc'
-version = '1.2.2'
+version = '1.2.3'
