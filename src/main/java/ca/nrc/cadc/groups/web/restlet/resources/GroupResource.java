@@ -35,8 +35,11 @@
 package ca.nrc.cadc.groups.web.restlet.resources;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 
+import java.net.URISyntaxException;
+import javax.print.URIException;
 import org.json.JSONWriter;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -103,7 +106,7 @@ public class GroupResource extends AbstractResource {
     @Post
     public void accept(final Representation entity)
         throws GroupNotFoundException, UserNotFoundException,
-        WriterException, IOException {
+        WriterException, IOException, URISyntaxException, ReaderException {
         final Form form = getForm(entity);
         update(form);
     }
@@ -118,7 +121,9 @@ public class GroupResource extends AbstractResource {
     void update(final Form form) throws GroupNotFoundException,
         UserNotFoundException,
         WriterException,
-        IOException {
+        IOException,
+        URISyntaxException,
+        ReaderException {
         final Group group = getGroup();
         updateGroup(group, form);
         getGMSClient().updateGroup(group);
