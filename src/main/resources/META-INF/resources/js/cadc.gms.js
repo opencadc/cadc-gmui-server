@@ -49,6 +49,7 @@
               list_header_remove: 'Remove',
               list_header_admin_name: 'Name',
               list_header_admins: 'Administrators',
+              admins_only_msg: "Administrators only",
               button_close: 'Close',
               button_reset: 'Reset',
               button_done: 'Done',
@@ -66,7 +67,8 @@
               details_form_submit_button_delete: 'Delete',
               details_form_submit_button_create: 'Create',
               navigation_menu_header_label: 'Groups',
-              navigation_menu_new_group_label: 'New Group'
+              navigation_menu_new_group_label: 'New Group',
+              view_txt: 'View'
             },
             fr: {
               '400_reason': 'Erreur de demande',
@@ -113,6 +115,7 @@
               list_header_remove: 'Supprimer',
               list_header_admin_name: 'Nom',
               list_header_admins: 'Administrateurs',
+              admins_only_msg: 'Administrateurs seulement',
               button_close: 'Fermer',
               button_reset: 'Réinitialiser',
               button_done: 'Complet',
@@ -130,7 +133,8 @@
               details_form_submit_button_delete: 'Effacer',
               details_form_submit_button_create: 'Créer',
               navigation_menu_header_label: 'Groupes',
-              navigation_menu_new_group_label: 'Créer une groupe'
+              navigation_menu_new_group_label: 'Créer une groupe',
+              view_txt: 'Vue'
             }
           },
           resource: 'service',
