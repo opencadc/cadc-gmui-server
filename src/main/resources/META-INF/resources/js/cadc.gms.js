@@ -49,7 +49,7 @@
               list_header_remove: 'Remove',
               list_header_admin_name: 'Name',
               list_header_admins: 'Administrators',
-              admins_only_msg: "Administrators only",
+              admins_only_msg: 'Administrators only',
               button_close: 'Close',
               button_reset: 'Reset',
               button_done: 'Done',
