@@ -13,6 +13,9 @@
    *        _options{grid_offset: 100}  Offset for the grid to the bottom of the page.
    */
   function GMUI(_options) {
+
+    var groupManager = new cadc.web.gms.GroupManager(cadc.web.gms.resource)
+
     /**
      * Start the application.
      */
@@ -20,8 +23,6 @@
       var LOADER_CONTAINER_SELECTOR = '.loader_container'
       var GRID_OUTER_CONTAINER_SELECTOR = '#content_column_main_inner'
       var CSS_INVISIBLE = 'sr-only'
-
-      var groupManager = new cadc.web.gms.GroupManager(cadc.web.gms.resource)
 
       var $associatesContainers = $('div.associates')
       var $groupContainers = $('div.group_container')
@@ -433,36 +434,47 @@
         resizeable: false,
         filterable: false,
         formatter: function(row, cell, value, columnDef, dataContext) {
-          return (
-            '<span class="cellValue">' +
-            '<button class="btn btn-link btn-xs edit_admins_link" data-toggle="modal" data-target="#edit_admins_modal" ' +
-            'data-group-admin="' +
-            (dataContext[groupAdmins] === 'true') +
-            '" ' +
-            'data-group-name="' +
-            dataContext[groupName] +
-            '">' +
-            'View </button></span>'
-          )
+          var viewText = groupManager.translateField('view_txt')
+          return '<span class="cellValue">' +
+                  '<button class="btn btn-link btn-xs edit_admins_link" data-toggle="modal" data-target="#edit_admins_modal" ' +
+                  'data-group-admin="' +
+                  (dataContext[groupAdmins] === 'true') +
+                  '" ' +
+                  'data-group-name="' +
+                  dataContext[groupName] +
+                  '">' + viewText
+                  '</button></span>'
         }
       }
+
+
 
       var groupMembersLinkOptions = {
         sortable: false,
         resizeable: false,
         filterable: false,
         formatter: function(row, cell, value, columnDef, dataContext) {
-          return (
-            '<span class="cellValue">' +
-            '<button class="btn btn-link btn-xs edit_members_link" data-toggle="modal" data-target="#edit_members_modal" ' +
-            'data-group-admin="' +
-            (dataContext[groupAdmins] === 'true') +
-            '" ' +
-            'data-group-name="' +
-            dataContext[groupName] +
-            '">' +
-            'View </button></span>'
-          )
+          var columnContent = ''
+          var viewText = groupManager.translateField('view_txt')
+
+          if ((dataContext[groupAdmins] === 'true') ||
+              (dataContext['OwnerRights'] === 'true')) {
+                columnContent = '<span class="cellValue">' +
+                    '<button class="btn btn-link btn-xs edit_members_link" data-toggle="modal" data-target="#edit_members_modal" ' +
+                    'data-group-admin="' +
+                    (dataContext[groupAdmins] === 'true') +
+                    '" ' +
+                    'data-group-name="' +
+                    dataContext[groupName] +
+                    '">' + viewText
+                    '</button></span>'
+            } else {
+              columnContent =
+                  '<div class="gmui-no-access gmui-tooltip-hvr" ' +
+                  ' data-contentkey="gmui-no-access" title="' + groupManager.translateField('admins_only_msg') + '">' + viewText + '</div>'
+            }
+
+          return columnContent
         }
       }
 
@@ -986,11 +998,12 @@
         $mainContainer
           .find(GRID_OUTER_CONTAINER_SELECTOR)
           .removeClass(CSS_INVISIBLE)
+
       })
 
       /*
-                       * On update, when the Group is loaded, populate some known fields.
-                       */
+       * On update, when the Group is loaded, populate some known fields.
+       */
       groupManager.subscribe(cadc.web.gms.events.onMembersLoaded, function(
         e,
         data
