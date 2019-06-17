@@ -434,16 +434,19 @@
         resizeable: false,
         filterable: false,
         formatter: function(row, cell, value, columnDef, dataContext) {
-          var viewText = groupManager.translateField('view_txt')
+
+          var buttonText = ((dataContext[groupAdmins] === 'true') || (dataContext['OwnerRights'] === 'true')) ?
+                                groupManager.translateField('edit_txt') : groupManager.translateField('view_txt')
+
           return '<span class="cellValue">' +
-                  '<button class="btn btn-link btn-xs edit_admins_link" data-toggle="modal" data-target="#edit_admins_modal" ' +
-                  'data-group-admin="' +
-                  (dataContext[groupAdmins] === 'true') +
-                  '" ' +
-                  'data-group-name="' +
-                  dataContext[groupName] +
-                  '">' + viewText
-                  '</button></span>'
+                '<button class="btn btn-link btn-xs edit_admins_link" data-toggle="modal" data-target="#edit_admins_modal" ' +
+                'data-group-admin="' +
+                (dataContext[groupAdmins] === 'true') +
+                '" ' +
+                'data-group-name="' +
+                dataContext[groupName] +
+                '">' +  buttonText +
+                '</button></span>'
         }
       }
 
@@ -455,7 +458,7 @@
         filterable: false,
         formatter: function(row, cell, value, columnDef, dataContext) {
           var columnContent = ''
-          var viewText = groupManager.translateField('view_txt')
+          var viewText = groupManager.translateField('edit_txt')
 
           if ((dataContext[groupAdmins] === 'true') ||
               (dataContext['OwnerRights'] === 'true')) {
