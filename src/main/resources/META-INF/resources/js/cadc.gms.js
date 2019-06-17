@@ -66,6 +66,7 @@
               details_form_submit_button_update: 'Update',
               details_form_submit_button_delete: 'Delete',
               details_form_submit_button_create: 'Create',
+              edit_txt: 'Edit',
               navigation_menu_header_label: 'Groups',
               navigation_menu_new_group_label: 'New Group',
               view_txt: 'View'
@@ -132,6 +133,7 @@
               details_form_submit_button_update: 'Mise à jour',
               details_form_submit_button_delete: 'Effacer',
               details_form_submit_button_create: 'Créer',
+              edit_txt: 'Modifier',
               navigation_menu_header_label: 'Groupes',
               navigation_menu_new_group_label: 'Créer une groupe',
               view_txt: 'Vue'
