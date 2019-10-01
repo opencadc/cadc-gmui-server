@@ -44,11 +44,18 @@ import java.security.PrivilegedExceptionAction;
 import java.util.*;
 import java.util.concurrent.*;
 
+import ca.nrc.cadc.ac.Group;
+import ca.nrc.cadc.ac.GroupAlreadyExistsException;
+import ca.nrc.cadc.ac.Role;
+import ca.nrc.cadc.ac.User;
+import ca.nrc.cadc.ac.UserNotFoundException;
+import ca.nrc.cadc.ac.WriterException;
 import ca.nrc.cadc.groups.web.WebGroupURI;
 import ca.nrc.cadc.util.ObjectUtil;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONWriter;
+import org.opencadc.gms.GroupURI;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -58,7 +65,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
-import ca.nrc.cadc.ac.*;
 import ca.nrc.cadc.dali.tables.TableData;
 import ca.nrc.cadc.dali.tables.TableWriter;
 import ca.nrc.cadc.dali.tables.ascii.AsciiTableWriter;
@@ -232,8 +238,8 @@ public class GroupListResource extends AbstractResource {
      */
     @Post
     public void store(final Representation entity)
-        throws GroupAlreadyExistsException, UserNotFoundException,
-        WriterException, IOException {
+            throws GroupAlreadyExistsException, UserNotFoundException,
+                   WriterException, IOException {
         final Form form = getForm(entity);
         final String groupName =
             form.getFirstValue(GroupResource.GROUP_NAME_FIELD);
