@@ -68,8 +68,8 @@
 
 package ca.nrc.cadc.groups.web;
 
+import org.opencadc.gms.GroupURI;
 import ca.nrc.cadc.ac.Group;
-import ca.nrc.cadc.ac.GroupURI;
 import ca.nrc.cadc.ac.User;
 
 import java.util.ArrayList;

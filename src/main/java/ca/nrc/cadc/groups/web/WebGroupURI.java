@@ -68,7 +68,8 @@
 
 package ca.nrc.cadc.groups.web;
 
-import ca.nrc.cadc.ac.GroupURI;
+
+import org.opencadc.gms.GroupURI;
 
 import java.net.URI;
 
