@@ -12,9 +12,9 @@ repositories {
 
 dependencies {
     compile 'log4j:log4j:1.2.+'
-    compile 'org.restlet.jee:org.restlet:[2.3.12,2.4)'
-    compile 'org.restlet.jee:org.restlet.ext.servlet:[2.3.12,2.4)'
-    compile 'org.restlet.jee:org.restlet.ext.json:[2.3.12,2.4)'
+    compile 'org.restlet.jee:org.restlet:[2.3.12,2.3.13)'
+    compile 'org.restlet.jee:org.restlet.ext.servlet:[2.3.12,2.3.13)'
+    compile 'org.restlet.jee:org.restlet.ext.json:[2.3.12,2.3.13)'
 
     compile 'org.opencadc:cadc-dali:[1.1.6,)'
     compile 'org.opencadc:cadc-util:[1.1.4,)'
@@ -29,4 +29,4 @@ dependencies {
 
 sourceCompatibility = '1.7'
 group = 'org.opencadc'
-version = '1.2.6'
+version = '1.2.7'
