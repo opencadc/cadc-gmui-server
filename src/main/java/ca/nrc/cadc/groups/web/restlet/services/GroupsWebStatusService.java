@@ -61,6 +61,7 @@ import ca.nrc.cadc.util.StringUtil;
  * Status Service to intercept errors for the Access Control Web Application.
  */
 public class GroupsWebStatusService extends StatusService {
+
     /**
      * Constructor.
      */
@@ -89,7 +90,7 @@ public class GroupsWebStatusService extends StatusService {
      * @return The representation of the given status.
      */
     @Override
-    public Representation getRepresentation(final Status status, final Request request, final Response response) {
+    public Representation toRepresentation(final Status status, final Request request, final Response response) {
         return new StringRepresentation(status.getReasonPhrase());
     }
 
@@ -107,8 +108,8 @@ public class GroupsWebStatusService extends StatusService {
      * @return The representation of the given status.
      */
     @Override
-    public Status getStatus(final Throwable throwable, final Request request,
-                            final Response response) {
+    public Status toStatus(final Throwable throwable, final Request request,
+                           final Response response) {
         return translateStatus(throwable);
     }
 
@@ -126,7 +127,7 @@ public class GroupsWebStatusService extends StatusService {
         }
         // Group already exists, so throw a 409 Conflict.
         else if (throwable instanceof GroupAlreadyExistsException
-            || throwable instanceof MemberAlreadyExistsException) {
+                 || throwable instanceof MemberAlreadyExistsException) {
             status = new Status(Status.CLIENT_ERROR_CONFLICT.getCode(), throwable);
         } else if (throwable instanceof FormValidationException) {
             status = Status.CLIENT_ERROR_NOT_ACCEPTABLE;
@@ -139,7 +140,7 @@ public class GroupsWebStatusService extends StatusService {
                 status = translateStatus(cause);
             }
         } else if ((throwable instanceof UnsupportedEncodingException)
-            || (throwable instanceof IllegalArgumentException)) {
+                   || (throwable instanceof IllegalArgumentException)) {
             if (!StringUtil.hasText(throwable.getMessage())) {
                 status = new Status(Status.CLIENT_ERROR_BAD_REQUEST.getCode(), throwable);
             } else {
@@ -154,19 +155,13 @@ public class GroupsWebStatusService extends StatusService {
                                 throwable, null, "NO_SUCH_GROUP",
                                 null);
         } else if ((throwable instanceof UserNotFoundException)
-            || (throwable instanceof MemberNotFoundException)) {
+                   || (throwable instanceof MemberNotFoundException)) {
             status = new Status(Status.CLIENT_ERROR_NOT_FOUND.getCode(),
                                 throwable, null, "NO_SUCH_USER", null);
         } else if (throwable instanceof AccessControlException) {
             final String message = throwable.getMessage();
-
-            if (StringUtil.hasText(message) && message.startsWith("authorization")) {
-                status = new Status(Status.CLIENT_ERROR_FORBIDDEN.getCode(),
-                                    throwable, "FORBIDDEN", "FORBIDDEN", null);
-            } else {
-                status = new Status(Status.CLIENT_ERROR_UNAUTHORIZED.getCode(),
-                                    throwable, null, throwable.getMessage(), null);
-            }
+            status = new Status(Status.CLIENT_ERROR_FORBIDDEN.getCode(),
+                                StringUtil.hasText(message) ? message.trim() : message);
         } else if (throwable instanceof IllegalStateException) {
             final Throwable cause = throwable.getCause();
 
