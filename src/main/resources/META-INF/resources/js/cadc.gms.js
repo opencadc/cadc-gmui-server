@@ -650,13 +650,13 @@
         .done(function(data) {
           groupCreated(data)
         })
-        .fail(function(jqxhr, options, error) {
+        .fail(function(jqxhr, statusText, error) {
           trigger(cadc.web.gms.events.onGroupCreatedError, {
-            textStatus: options,
+            textStatus: statusText,
             error: error,
             request: jqxhr,
-            reason: getErrorReason(jqxhr.status + '_Group'),
-            message: getErrorMessage(jqxhr, '_Group')
+            reason: statusText,
+            message: jqxhr.responseText
           })
         })
     }

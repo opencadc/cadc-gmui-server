@@ -8,25 +8,29 @@ plugins {
 repositories {
     mavenLocal()
     jcenter()
+
+    maven {
+        url = 'https://maven.restlet.talend.com'
+    }
 }
 
 dependencies {
-    compile 'log4j:log4j:1.2.+'
-    compile 'org.restlet.jee:org.restlet:[2.3.12,2.3.13)'
-    compile 'org.restlet.jee:org.restlet.ext.servlet:[2.3.12,2.3.13)'
-    compile 'org.restlet.jee:org.restlet.ext.json:[2.3.12,2.3.13)'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.restlet.jee:org.restlet:2.3.12'
+    compile 'org.restlet.jee:org.restlet.ext.servlet:2.3.12'
+    compile 'org.restlet.jee:org.restlet.ext.json:2.3.12'
 
     compile 'org.opencadc:cadc-dali:[1.1.6,)'
-    compile 'org.opencadc:cadc-util:[1.1.4,)'
+    compile 'org.opencadc:cadc-util:[1.2.30,)'
     compile 'org.opencadc:cadc-web-util:[1.0.15,)'
     compile 'org.opencadc:cadc-registry:[1.5.4,)'
     compile 'org.opencadc:cadc-access-control:[1.1.18,1.2)'
 
-    testCompile 'junit:junit:4.+'
-    testCompile 'org.skyscreamer:jsonassert:1.+'
-    testCompile 'org.easymock:easymock:3.+'
+    testCompile 'junit:junit:[4.12,5.0)'
+    testCompile 'org.skyscreamer:jsonassert:[1.0,2.0)'
+    testCompile 'org.easymock:easymock:[3.6,)'
 }
 
 sourceCompatibility = '1.7'
 group = 'org.opencadc'
-version = '1.2.7'
+version = '1.2.8'

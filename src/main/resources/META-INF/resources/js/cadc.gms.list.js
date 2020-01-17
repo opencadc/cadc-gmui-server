@@ -611,6 +611,7 @@
         $thisForm.find('#submit_error').empty()
         $thisForm.find('input:text:enabled').val('')
         $thisForm.find('textarea:enabled').val('')
+        $thisForm.find('.form-message').empty();
       })
 
       $groupForm.find(':submit').click(function(event) {
@@ -666,8 +667,8 @@
       function clearMessageContainer(_$form) {
         var $messageContainer = _$form.find('.form-message')
         $messageContainer.removeClass('color-accent')
-        $messageContainer.removeClass('color-attention')
-        $messageContainer.addClass('color-attention')
+        $messageContainer.removeClass('text-danger')
+        $messageContainer.addClass('text-danger')
         $messageContainer.text('')
       }
 
@@ -1164,7 +1165,7 @@
         var $thisForm = $editGroupContainer.find('form')
         var $messageContainer = $thisForm.find('.form-message')
 
-        $messageContainer.removeClass('color-attention')
+        $messageContainer.removeClass('text-danger')
         $messageContainer.addClass('color-accent')
         $messageContainer.text('Update complete.')
       })
