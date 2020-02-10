@@ -58,8 +58,7 @@ import javax.security.auth.Subject;
 import static org.easymock.EasyMock.*;
 
 
-public class AssociationsResourceTest
-    extends AbstractResourceTest<AssociationsResource> {
+public class AssociationsResourceTest extends AbstractResourceTest<AssociationsResource> {
     @Test
     public void representJSON() throws Exception {
         final Form mockQueryForm = createMock(Form.class);
@@ -81,8 +80,8 @@ public class AssociationsResourceTest
         groupNameResults.add("TimeTravellers");
         groupNameResults.add("Temps");
 
-        expect(getMockUserClient().getDisplayUsers()).andReturn(listResults).times(1);
-        expect(getMockGMSClient().getGroupNames()).andReturn(groupNameResults).once();
+        expect(getMockUserClient().getDisplayUsers()).andReturn(listResults).times(2);
+        expect(getMockGMSClient().getGroupNames()).andReturn(groupNameResults).times(2);
 
         expect(mockQueryForm.getFirstValue("q")).andReturn("te").once();
 
@@ -168,9 +167,8 @@ public class AssociationsResourceTest
         groupNameResults.add("TimeTravellers");
         groupNameResults.add("Temps");
 
-        expect(getMockUserClient().getDisplayUsers()).andReturn(listResults).times(1);
-        expect(getMockGMSClient().getGroupNames()).andReturn(
-            groupNameResults).once();
+        expect(getMockUserClient().getDisplayUsers()).andReturn(listResults).times(2);
+        expect(getMockGMSClient().getGroupNames()).andReturn(groupNameResults).times(2);
 
         expect(mockQueryForm.getFirstValue("q")).andReturn("te").once();
 
