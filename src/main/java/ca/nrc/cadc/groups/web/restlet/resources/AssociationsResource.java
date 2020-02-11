@@ -90,6 +90,7 @@ public class AssociationsResource extends AbstractResource {
         super();
 
         this.suggester = suggester;
+        refresh();
     }
 
 
