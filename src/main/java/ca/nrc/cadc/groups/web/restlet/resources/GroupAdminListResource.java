@@ -195,19 +195,26 @@ public class GroupAdminListResource extends AbstractResource {
 
     @Post
     public void accept(final Representation entity) throws GroupNotFoundException, UserNotFoundException,
-        WriterException, IOException, ReaderException, URISyntaxException {
+        WriterException, IOException, ReaderException, URISyntaxException, MemberAlreadyExistsException {
         final Associate associate = getAssociate(entity);
         final Group group = getGroup();
 
+        if (addSuccessful(group, associate)) {
+            getGMSClient().updateGroup(group);
+        } else {
+            throw new MemberAlreadyExistsException(String.format("Administrator with ID '%s' already exists.",
+                                                                 associate.getID()));
+        }
+    }
+
+    private boolean addSuccessful(final Group group, final Associate associate) {
         if (associate.isUser()) {
             final User user = new User();
             user.getIdentities().add(new HttpPrincipal(associate.getID()));
 
-            group.getUserAdmins().add(user);
+            return group.getUserAdmins().add(user);
         } else {
-            group.getGroupAdmins().add(new Group(new WebGroupURI(associate.getID())));
+            return group.getGroupAdmins().add(new Group(new WebGroupURI(associate.getID())));
         }
-
-        getGMSClient().updateGroup(group);
     }
 }
