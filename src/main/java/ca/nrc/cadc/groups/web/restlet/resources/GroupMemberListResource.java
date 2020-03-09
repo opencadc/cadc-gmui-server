@@ -65,6 +65,7 @@ import ca.nrc.cadc.groups.web.view.json.JSONMemberViewImpl;
  * Handle details for Group members.
  */
 public class GroupMemberListResource extends AbstractResource {
+
     @Get("txt|text")
     public Representation representCSV() throws Exception {
         final Group group = getGroup();
@@ -103,14 +104,14 @@ public class GroupMemberListResource extends AbstractResource {
                     @Override
                     public Iterator<List<Object>> iterator() {
                         final SortedSet<User> sortedUserMembers = new TreeSet<>(
-                            new Comparator<User>() {
-                                @Override
-                                public int compare(User o1, User o2) {
-                                    return o1.getHttpPrincipal().getName().
-                                        compareTo(o2.getHttpPrincipal().
-                                            getName());
-                                }
-                            });
+                                new Comparator<User>() {
+                                    @Override
+                                    public int compare(User o1, User o2) {
+                                        return o1.getHttpPrincipal().getName().
+                                                compareTo(o2.getHttpPrincipal().
+                                                        getName());
+                                    }
+                                });
 
                         sortedUserMembers.addAll(group.getUserMembers());
 
@@ -119,7 +120,7 @@ public class GroupMemberListResource extends AbstractResource {
                             @Override
                             public int compare(Group o1, Group o2) {
                                 return o1.getID().toString().compareTo(
-                                    o2.getID().toString());
+                                        o2.getID().toString());
                             }
                         });
 
@@ -142,6 +143,7 @@ public class GroupMemberListResource extends AbstractResource {
      * Obtain the collection of Members for the current Group.
      *
      * @return Representation of Members for this Group.
+     *
      * @throws ca.nrc.cadc.ac.GroupNotFoundException Group isn't found.
      * @throws java.io.IOException                   Server error.
      */
@@ -171,7 +173,7 @@ public class GroupMemberListResource extends AbstractResource {
 
     private void writeMembers(final JSONWriter jsonWriter, final Group group,
                               final boolean hasOwnerRights, final boolean hasAdminRights)
-        throws JSONException {
+            throws JSONException {
         jsonWriter.array();
 
         try {
@@ -189,7 +191,7 @@ public class GroupMemberListResource extends AbstractResource {
 
     @Post
     public void accept(final Representation entity) throws GroupNotFoundException, UserNotFoundException,
-        MemberAlreadyExistsException, IOException {
+                                                           MemberAlreadyExistsException, IOException {
         final Associate associate = getAssociate(entity);
 
         try {
@@ -202,7 +204,7 @@ public class GroupMemberListResource extends AbstractResource {
             // IOExceptions are the catch-all in the GMSClient.  Break it down here to provide something useful to the
             // UI.
 
-            if (e.getMessage().contains("(409) Conflict")) {
+            if (e.getMessage().toLowerCase().contains("exists")) {
                 throw new MemberAlreadyExistsException(String.format("Member with ID '%s' already exists.",
                                                                      associate.getID()));
             } else {
