@@ -1106,10 +1106,11 @@
       })
 
       groupManager.subscribe(cadc.web.gms.events.onAdminAddedError, function(
-        e
+        e,
+        data
       ) {
         $editAdminsContainer.find(LOADER_CONTAINER_SELECTOR).hide()
-        setAutocompleteMessageText(e.message)
+        setAutocompleteMessageText(data.message)
       })
 
       groupManager.subscribe(
