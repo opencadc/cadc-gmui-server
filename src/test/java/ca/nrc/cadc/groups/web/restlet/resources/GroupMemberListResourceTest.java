@@ -294,7 +294,7 @@ public class GroupMemberListResourceTest extends AbstractResourceTest<GroupMembe
 
         getMockGMSClient().addUserMember("GROUP1",
                                          new HttpPrincipal("jenkinsd"));
-        expectLastCall().andThrow(new IOException("(409) Conflict")).once();
+        expectLastCall().andThrow(new IOException("User exists")).once();
 
         final InputStream input =
             new ByteArrayInputStream(
