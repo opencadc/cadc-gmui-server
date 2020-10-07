@@ -64,6 +64,7 @@ import ca.nrc.cadc.groups.web.view.json.JSONMemberViewImpl;
 
 
 public class GroupAdminListResource extends AbstractResource {
+
     @Get("txt|text")
     public Representation representCSV() throws Exception {
         final Group group = getGroup();
@@ -73,8 +74,7 @@ public class GroupAdminListResource extends AbstractResource {
         return new WriterRepresentation(MediaType.TEXT_CSV) {
             @Override
             public void write(final Writer writer) throws IOException {
-                final TableWriter<VOTableDocument> tableWriter =
-                    new AsciiTableWriter(AsciiTableWriter.ContentType.CSV);
+                final TableWriter<VOTableDocument> tableWriter = new AsciiTableWriter(AsciiTableWriter.ContentType.CSV);
                 final VOTableDocument doc = new VOTableDocument();
                 final VOTableResource res = new VOTableResource("results");
                 final VOTableTable tab = new VOTableTable();
@@ -103,34 +103,16 @@ public class GroupAdminListResource extends AbstractResource {
                      */
                     @Override
                     public Iterator<List<Object>> iterator() {
-                        final SortedSet<User>
-                            sortedUserAdmins = new TreeSet<>(
-                            new Comparator<User>() {
-                                @Override
-                                public int compare(User o1, User o2) {
-                                    return o1.getHttpPrincipal().getName().
-                                        compareTo(o2.getHttpPrincipal().
-                                            getName());
-                                }
-                            });
+                        final SortedSet<User> sortedUserAdmins = new TreeSet<>(
+                                Comparator.comparing(o -> o.getHttpPrincipal().getName()));
 
                         sortedUserAdmins.addAll(group.getUserAdmins());
-
                         final SortedSet<Group> sortedGroupAdmins =
-                            new TreeSet<>(new Comparator<Group>() {
-                                @Override
-                                public int compare(Group o1, Group o2) {
-                                    return o1.getID().toString().compareTo(
-                                        o2.getID().toString());
-                                }
-                            });
-
-                        final Iterator<User> userIterator =
-                            sortedUserAdmins.iterator();
+                                new TreeSet<>(Comparator.comparing(o -> o.getID().toString()));
+                        final Iterator<User> userIterator = sortedUserAdmins.iterator();
 
                         sortedGroupAdmins.addAll(group.getGroupAdmins());
-                        final Iterator<Group> groupIterator =
-                            sortedGroupAdmins.iterator();
+                        final Iterator<Group> groupIterator = sortedGroupAdmins.iterator();
 
                         return new GroupAssociatesIterator(userIterator, groupIterator, group.getID(), hasOwnerRights,
                                                            hasAdminRights);
@@ -146,13 +128,15 @@ public class GroupAdminListResource extends AbstractResource {
      * Obtain the collection of Administrators for the current Group.
      *
      * @return Representation of Administrators for this Group.
-     * @throws ca.nrc.cadc.ac.GroupNotFoundException Group isn't found.
-     * @throws java.io.IOException                   Server error.
+     *
+     * @throws GroupNotFoundException Group isn't found.
+     * @throws UserNotFoundException  User being added is not found.
+     * @throws java.io.IOException    Server error.
      */
     @Get("json")
     public Representation representJSON() throws GroupNotFoundException,
-        UserNotFoundException,
-        IOException {
+                                                 UserNotFoundException,
+                                                 IOException {
         final Group group = getGroup();
         final boolean hasOwnerRights = currentUserHasOwnerRights(group);
         final boolean hasAdminRights = currentUserHasAdminRights(group);
@@ -181,21 +165,31 @@ public class GroupAdminListResource extends AbstractResource {
         jsonWriter.array();
 
         try {
-            for (final User userMember : group.getUserAdmins()) {
-                new JSONMemberViewImpl(jsonWriter, hasOwnerRights, hasAdminRights).write(userMember);
-            }
-
-            for (final Group groupMember : group.getGroupAdmins()) {
-                new JSONGroupViewImpl(jsonWriter, hasOwnerRights, hasAdminRights).write(groupMember);
-            }
+            group.getUserAdmins().forEach(
+                    u -> new JSONMemberViewImpl(jsonWriter, hasOwnerRights, hasAdminRights).write(u));
+            group.getGroupAdmins().forEach(
+                    g -> new JSONGroupViewImpl(jsonWriter, hasOwnerRights, hasAdminRights).write(g));
         } finally {
             jsonWriter.endArray();
         }
     }
 
+    /**
+     * POST to add a group admin.
+     *
+     * @param entity The entity containing the User or Group to add.
+     * @throws GroupNotFoundException       The Group to add does not exist.
+     * @throws UserNotFoundException        The User to add does not exist.
+     * @throws WriterException              Writing failed.
+     * @throws IOException                  Any I/O or server failure.
+     * @throws ReaderException              Reading the Group/User XML failed.
+     * @throws URISyntaxException           URI for the Group to update is invalid.
+     * @throws MemberAlreadyExistsException The Group or User being added already exists.
+     */
     @Post
     public void accept(final Representation entity) throws GroupNotFoundException, UserNotFoundException,
-        WriterException, IOException, ReaderException, URISyntaxException, MemberAlreadyExistsException {
+                                                           WriterException, IOException, ReaderException,
+                                                           URISyntaxException, MemberAlreadyExistsException {
         final Associate associate = getAssociate(entity);
         final Group group = getGroup();
 

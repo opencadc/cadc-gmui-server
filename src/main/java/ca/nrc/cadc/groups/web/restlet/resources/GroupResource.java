@@ -35,11 +35,11 @@
 package ca.nrc.cadc.groups.web.restlet.resources;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 
 import java.net.URISyntaxException;
-import javax.print.URIException;
+import java.security.AccessControlException;
+
 import org.json.JSONWriter;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -57,11 +57,11 @@ import ca.nrc.cadc.groups.web.view.json.JSONGroupViewImpl;
 /**
  * Abstract resource to deal with a single Group. No methods will be
  * mapped to this particular class.
- * <p>
- * POST - Update this Group's Description.
- * GET - Get this Group's details.
+ * <p>POST - Update this Group's Description.
+ * <p>GET - Get this Group's details.
  */
 public class GroupResource extends AbstractResource {
+
     final static String GROUP_NAME_FIELD = "group-name";
     final static String GROUP_DESCRIPTION_FIELD = "group-description";
 
@@ -70,6 +70,7 @@ public class GroupResource extends AbstractResource {
      * Obtain the default representation of a Group.
      *
      * @return A Representation of this Group.
+     *
      * @throws ca.nrc.cadc.ac.GroupNotFoundException Group isn't found.
      * @throws java.io.IOException                   Server error.
      */
@@ -84,7 +85,7 @@ public class GroupResource extends AbstractResource {
             public void write(final Writer writer) throws IOException {
                 final JSONWriter jsonWriter = new JSONWriter(writer);
                 final GMSView<Group> view =
-                    new JSONGroupViewImpl(jsonWriter, hasOwnerRights, hasAdminRights);
+                        new JSONGroupViewImpl(jsonWriter, hasOwnerRights, hasAdminRights);
                 try {
                     view.write(group);
                 } catch (Exception e) {
@@ -95,18 +96,21 @@ public class GroupResource extends AbstractResource {
     }
 
     /**
-     * Accept a POST request from the UI page. Unfortunately, HTML forms
-     * only support GET and POST, so this POST is to accommodate submits
-     * from those forms.
+     * Accept a POST request from the UI page and add a Group. Unfortunately, HTML forms
+     * only support GET and POST, so this POST is to accommodate submits from those forms.
      *
      * @param entity The Request payload.
-     * @throws ca.nrc.cadc.ac.GroupNotFoundException Group isn't found.
-     * @throws java.io.IOException                   Server error.
+     * @throws GroupNotFoundException If the group was not found.
+     * @throws UserNotFoundException If a member was not found.
+     * @throws java.io.IOException If any other error occurs.
+     * @throws URISyntaxException If URI is incorrect.
+     * @throws ReaderException If reader can't be instantiated.
+     * @throws WriterException If the writer can't be instantiated.
      */
     @Post
-    public void accept(final Representation entity)
-        throws GroupNotFoundException, UserNotFoundException,
-        WriterException, IOException, URISyntaxException, ReaderException {
+    public void accept(final Representation entity) throws GroupNotFoundException, UserNotFoundException,
+                                                           WriterException, IOException, URISyntaxException,
+                                                           ReaderException {
         final Form form = getForm(entity);
         update(form);
     }
@@ -118,12 +122,8 @@ public class GroupResource extends AbstractResource {
      * @throws ca.nrc.cadc.ac.GroupNotFoundException Group isn't found.
      * @throws java.io.IOException                   Server error.
      */
-    void update(final Form form) throws GroupNotFoundException,
-        UserNotFoundException,
-        WriterException,
-        IOException,
-        URISyntaxException,
-        ReaderException {
+    void update(final Form form) throws GroupNotFoundException, UserNotFoundException, WriterException,
+                                        IOException, URISyntaxException, ReaderException {
         final Group group = getGroup();
         updateGroup(group, form);
         getGMSClient().updateGroup(group);

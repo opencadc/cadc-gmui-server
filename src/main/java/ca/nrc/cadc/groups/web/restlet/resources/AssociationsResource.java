@@ -39,12 +39,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.security.PrivilegedAction;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import ca.nrc.cadc.ac.User;
 import ca.nrc.cadc.auth.SSLUtil;
@@ -70,11 +67,10 @@ import javax.security.auth.Subject;
 public class AssociationsResource extends AbstractResource {
     private final static Logger LOGGER = Logger.getLogger(AssociationsResource.class);
 
-    private final static Set<Associate> ASSOCIATE_CACHE =
-                                Collections.newSetFromMap(new ConcurrentHashMap<Associate, Boolean>());
+    private final static Set<Associate> ASSOCIATE_CACHE = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-    // Fifteen minutes.  Used in the Spring configuration.
-    public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 30 * 60 * 1000;
+    // Twelve hours.  Used in the Spring configuration.
+    public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 12 * 60 * 60 * 1000;
 
     private final Suggester<Associate> suggester;
     private AssociationsCacheState associationsCacheState =
@@ -85,6 +81,7 @@ public class AssociationsResource extends AbstractResource {
      * Default constructor.
      *
      * @param suggester The suggester to use to match entries.
+     * @throws Exception    For any unknown errors being passed up the call stack.
      */
     public AssociationsResource(final Suggester<Associate> suggester) throws Exception {
         super();
@@ -106,12 +103,9 @@ public class AssociationsResource extends AbstractResource {
         LOGGER.info("Refreshing GMUI cache");
         updateState(AssociationsCacheState.REFRESHING);
 
-        Subject.doAs(getAuthorizedUser(), new PrivilegedAction<Void>() {
-            @Override
-            public Void run() {
-                doRefresh();
-                return null;
-            }
+        Subject.doAs(getAuthorizedUser(), (PrivilegedAction<Void>) () -> {
+            doRefresh();
+            return null;
         });
     }
 
@@ -122,7 +116,7 @@ public class AssociationsResource extends AbstractResource {
             final Set<Associate> tempSet = new HashSet<>();
 
             for (final User u : getUserClient().getDisplayUsers()) {
-                @SuppressWarnings("unchecked") final String username = u.getHttpPrincipal().getName();
+                final String username = u.getHttpPrincipal().getName();
 
                 final String displayName;
                 if (u.personalDetails == null) {
@@ -186,6 +180,7 @@ public class AssociationsResource extends AbstractResource {
     /**
      * Accept a POST request to refresh this cache.
      *
+     * @param payload       The payload being POSTed.  Not used.
      * @throws Exception For anything that needs to be interpreted by the
      *                   Status Service.
      */
@@ -194,6 +189,10 @@ public class AssociationsResource extends AbstractResource {
         refresh();
     }
 
+    /**
+     * @return  Representation in JSON format.
+     * @throws Exception    For errors during processing.
+     */
     @Get("json")
     public Representation representJSON() throws Exception {
         final SuggestionResults<Associate> searchResults = searchEntries();
@@ -209,14 +208,11 @@ public class AssociationsResource extends AbstractResource {
                     jsonWriter.key("matches");
 
                     jsonWriter.array();
-                    for (final Associate associate : searchResults.getResults()) {
-                        new JSONAssociateViewImpl(jsonWriter).write(associate);
-                    }
+                    searchResults.getResults().forEach(r -> new JSONAssociateViewImpl(jsonWriter).write(r));
                     jsonWriter.endArray();
 
                     if (searchResults.getMoreResultsCount() > 0) {
-                        jsonWriter.key("remaining").value(
-                            searchResults.getMoreResultsCount());
+                        jsonWriter.key("remaining").value(searchResults.getMoreResultsCount());
                     }
 
                     jsonWriter.endObject();
