@@ -104,25 +104,11 @@ public class GroupMemberListResource extends AbstractResource {
                     @Override
                     public Iterator<List<Object>> iterator() {
                         final SortedSet<User> sortedUserMembers = new TreeSet<>(
-                                new Comparator<User>() {
-                                    @Override
-                                    public int compare(User o1, User o2) {
-                                        return o1.getHttpPrincipal().getName().
-                                                compareTo(o2.getHttpPrincipal().
-                                                        getName());
-                                    }
-                                });
-
+                                Comparator.comparing(o -> o.getHttpPrincipal().getName()));
                         sortedUserMembers.addAll(group.getUserMembers());
 
                         final SortedSet<Group> sortedGroupMembers;
-                        sortedGroupMembers = new TreeSet<>(new Comparator<Group>() {
-                            @Override
-                            public int compare(Group o1, Group o2) {
-                                return o1.getID().toString().compareTo(
-                                        o2.getID().toString());
-                            }
-                        });
+                        sortedGroupMembers = new TreeSet<>(Comparator.comparing(o -> o.getID().toString()));
 
                         sortedGroupMembers.addAll(group.getGroupMembers());
 
@@ -145,6 +131,7 @@ public class GroupMemberListResource extends AbstractResource {
      * @return Representation of Members for this Group.
      *
      * @throws ca.nrc.cadc.ac.GroupNotFoundException Group isn't found.
+     * @throws UserNotFoundException                 User being added is not found.
      * @throws java.io.IOException                   Server error.
      */
     @Get("json")
@@ -189,6 +176,15 @@ public class GroupMemberListResource extends AbstractResource {
         }
     }
 
+    /**
+     * Add a member to this Group.
+     *
+     * @param entity The payload containing the User or Group being added.
+     * @throws GroupNotFoundException       If the Group being added does not exist.
+     * @throws UserNotFoundException        If the User being added does not exist.
+     * @throws MemberAlreadyExistsException If the Group/User already is a member.
+     * @throws IOException                  Any server or I/O related errors.
+     */
     @Post
     public void accept(final Representation entity) throws GroupNotFoundException, UserNotFoundException,
                                                            MemberAlreadyExistsException, IOException {

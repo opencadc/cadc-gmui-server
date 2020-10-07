@@ -67,7 +67,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 
-import ca.nrc.cadc.dali.tables.TableData;
 import ca.nrc.cadc.dali.tables.TableWriter;
 import ca.nrc.cadc.dali.tables.ascii.AsciiTableWriter;
 import ca.nrc.cadc.dali.tables.votable.VOTableDocument;
@@ -140,86 +139,78 @@ public class GroupListResource extends AbstractResource {
                 tab.getFields().add(new VOTableField("OwnerRights", "char"));
                 tab.getFields().add(new VOTableField("AdminRights", "char"));
 
-                tab.setTableData(new TableData() {
-                    @Override
-                    public Iterator<List<Object>> iterator() {
-                        final SortedSet<Map.Entry<Group, Role[]>> sortedGroupRoles =
-                                new TreeSet<>(
-                                        new Comparator<Map.Entry<Group, Role[]>>() {
-                                            @Override
-                                            public int compare(
-                                                    Map.Entry<Group, Role[]> o1,
-                                                    Map.Entry<Group, Role[]> o2) {
-                                                int keyCompare = o1.getKey().getID().toString().compareTo(
-                                                        o2.getKey().getID()
-                                                          .toString());
+                tab.setTableData(() -> {
+                    final SortedSet<Map.Entry<Group, Role[]>> sortedGroupRoles =
+                            new TreeSet<>(
+                                    (o1, o2) -> {
+                                        int keyCompare = o1.getKey().getID().toString().compareTo(
+                                                o2.getKey().getID()
+                                                  .toString());
 
-                                                if (keyCompare == 0) {
-                                                    keyCompare += Integer.compare(o1.getValue().length,
-                                                                                  o2.getValue().length);
-                                                }
+                                        if (keyCompare == 0) {
+                                            keyCompare += Integer.compare(o1.getValue().length,
+                                                                          o2.getValue().length);
+                                        }
 
-                                                return keyCompare;
-                                            }
-                                        });
+                                        return keyCompare;
+                                    });
 
-                        sortedGroupRoles.addAll(groupRoles.entrySet());
+                    sortedGroupRoles.addAll(groupRoles.entrySet());
 
-                        LOGGER.debug("Sorted into " + sortedGroupRoles.size());
+                    LOGGER.debug("Sorted into " + sortedGroupRoles.size());
 
-                        final Iterator<Map.Entry<Group, Role[]>> iter = sortedGroupRoles.iterator();
+                    final Iterator<Map.Entry<Group, Role[]>> iter = sortedGroupRoles.iterator();
 
-                        return new Iterator<List<Object>>() {
-                            @Override
-                            public boolean hasNext() {
-                                return iter.hasNext();
-                            }
+                    return new Iterator<List<Object>>() {
+                        @Override
+                        public boolean hasNext() {
+                            return iter.hasNext();
+                        }
 
-                            @Override
-                            public List<Object> next() {
-                                final List<Object> groupRow = new ArrayList<>();
-                                final Map.Entry<Group, Role[]> entry = iter.next();
-                                final Group group = entry.getKey();
-                                final GroupURI groupID = group.getID();
-                                final String description = group.description;
-                                final User owner = group.getOwner();
-                                final PersonalDetails personalDetails = owner.personalDetails;
+                        @Override
+                        public List<Object> next() {
+                            final List<Object> groupRow = new ArrayList<>();
+                            final Map.Entry<Group, Role[]> entry = iter.next();
+                            final Group group = entry.getKey();
+                            final GroupURI groupID = group.getID();
+                            final String description = group.description;
+                            final User owner = group.getOwner();
+                            final PersonalDetails personalDetails = owner.personalDetails;
 
-                                final String ownerName = (personalDetails == null)
-                                                         ? owner.getHttpPrincipal().getName()
-                                                         : String.format("%s %s", personalDetails.getFirstName(),
-                                                                         personalDetails.getLastName());
+                            final String ownerName = (personalDetails == null)
+                                                     ? owner.getHttpPrincipal().getName()
+                                                     : String.format("%s %s", personalDetails.getFirstName(),
+                                                                     personalDetails.getLastName());
 
-                                // Fields added here should also be added in
-                                // the headers above...
-                                groupRow.add(groupID.getName());
-                                groupRow.add(ownerName);
-                                groupRow.add(isAdmin(entry.getValue()));
-                                groupRow.add(true);
+                            // Fields added here should also be added in
+                            // the headers above...
+                            groupRow.add(groupID.getName());
+                            groupRow.add(ownerName);
+                            groupRow.add(isAdmin(entry.getValue()));
+                            groupRow.add(true);
 
-                                // Sanitize the data here.
-                                groupRow.add(StringUtil.hasText(description)
-                                             ? description.replaceAll("\n", "")
-                                                          .replaceAll("\r", "")
-                                             : "");
+                            // Sanitize the data here.
+                            groupRow.add(StringUtil.hasText(description)
+                                         ? description.replaceAll("\n", "")
+                                                      .replaceAll("\r", "")
+                                         : "");
 
-                                groupRow.add(ArrayUtil.contains(Role.OWNER, entry.getValue()));
-                                groupRow.add(isAdmin(entry.getValue()));
+                            groupRow.add(ArrayUtil.contains(Role.OWNER, entry.getValue()));
+                            groupRow.add(isAdmin(entry.getValue()));
 
-                                return groupRow;
-                            }
+                            return groupRow;
+                        }
 
-                            boolean isAdmin(final Role[] roles) {
-                                return (ArrayUtil.contains(Role.ADMIN, roles) || ArrayUtil.contains(Role.OWNER, roles));
-                            }
+                        boolean isAdmin(final Role[] roles) {
+                            return (ArrayUtil.contains(Role.ADMIN, roles) || ArrayUtil.contains(Role.OWNER, roles));
+                        }
 
-                            @Override
-                            public void remove() {
-                                iter.remove();
-                            }
+                        @Override
+                        public void remove() {
+                            iter.remove();
+                        }
 
-                        };
-                    }
+                    };
                 });
                 tableWriter.write(doc, writer);
             }
@@ -313,53 +304,49 @@ public class GroupListResource extends AbstractResource {
             for (final Role role : ROLES_TO_QUERY) {
                 // Using a Callable here
                 final Future<Void> future = executorService.submit(
-                        new Callable<Void>() {
-                            @Override
-                            public Void call() throws Exception {
-                                LOGGER.debug("Querying for " + role);
-                                return Subject.doAs(subject,
-                                                    new PrivilegedExceptionAction<Void>() {
-                                                        /**
-                                                         * Performs the computation.  This method will be called by
-                                                         * {@code AccessController.doPrivileged} after enabling
-                                                         * privileges.
-                                                         *
-                                                         * @return a class-dependent value that may represent the
-                                                         * results
-                                                         * of the
-                                                         * computation. Each class that implements
-                                                         * {@code PrivilegedAction}
-                                                         * should document what (if anything) this value represents.
-                                                         * @see AccessController#doPrivileged(PrivilegedAction)
-                                                         * @see AccessController#doPrivileged(PrivilegedAction,
-                                                         * AccessControlContext)
-                                                         */
-                                                        @Override
-                                                        public Void run() throws Exception {
-                                                            final List<Group> roleGroups =
-                                                                    getGMSClient().getMemberships(role);
+                        () -> {
+                            LOGGER.debug("Querying for " + role);
+                            return Subject.doAs(subject,
+                                                new PrivilegedExceptionAction<Void>() {
+                                                    /**
+                                                     * Performs the computation.  This method will be called by
+                                                     * {@code AccessController.doPrivileged} after enabling
+                                                     * privileges.
+                                                     *
+                                                     * @return a class-dependent value that may represent the
+                                                     * results
+                                                     * of the
+                                                     * computation. Each class that implements
+                                                     * {@code PrivilegedAction}
+                                                     * should document what (if anything) this value represents.
+                                                     * @see AccessController#doPrivileged(PrivilegedAction)
+                                                     * @see AccessController#doPrivileged(PrivilegedAction,
+                                                     * AccessControlContext)
+                                                     */
+                                                    @Override
+                                                    public Void run() throws Exception {
+                                                        final List<Group> roleGroups =
+                                                                getGMSClient().getMemberships(role);
+                                                        roleGroups.forEach(g -> {
+                                                            if (concurrentMap.containsKey(g)) {
+                                                                final Role[] existing = concurrentMap.get(g);
+                                                                final Set<Role> newRoles =
+                                                                        new HashSet<>(Arrays.asList(existing));
 
-                                                            for (final Group g : roleGroups) {
-                                                                if (concurrentMap.containsKey(g)) {
-                                                                    final Role[] existing = concurrentMap.get(g);
-                                                                    final Set<Role> newRoles =
-                                                                            new HashSet<>(Arrays.asList(existing));
+                                                                newRoles.add(role);
 
-                                                                    newRoles.add(role);
-
-                                                                    concurrentMap.put(g, newRoles.toArray(new Role[0]));
-                                                                } else {
-                                                                    concurrentMap.put(g, new Role[] {role});
-                                                                }
+                                                                concurrentMap.put(g, newRoles.toArray(new Role[0]));
+                                                            } else {
+                                                                concurrentMap.put(g, new Role[] {role});
                                                             }
+                                                        });
 
-                                                            LOGGER.debug(String.format("Found %d groups for %s.",
-                                                                                       roleGroups.size(), role));
+                                                        LOGGER.debug(String.format("Found %d groups for %s.",
+                                                                                   roleGroups.size(), role));
 
-                                                            return null;
-                                                        }
-                                                    });
-                            }
+                                                        return null;
+                                                    }
+                                                });
                         });
 
                 futureMap.put(role, future);
@@ -379,16 +366,13 @@ public class GroupListResource extends AbstractResource {
             final Future<Void> f = futureEntry.getValue();
 
             Subject.doAs(subject,
-                         new PrivilegedAction<Void>() {
-                             @Override
-                             public Void run() {
-                                 try {
-                                     return f.get();
-                                 } catch (ExecutionException e) {
-                                     throw new IllegalStateException(e.getCause());
-                                 } catch (InterruptedException e) {
-                                     throw new ResourceException(e);
-                                 }
+                         (PrivilegedAction<Void>) () -> {
+                             try {
+                                 return f.get();
+                             } catch (ExecutionException e) {
+                                 throw new IllegalStateException(e.getCause());
+                             } catch (InterruptedException e) {
+                                 throw new ResourceException(e);
                              }
                          });
         }
