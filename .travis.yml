@@ -1,7 +1,0 @@
-language: java
-dist: trusty
-sudo: required
-jdk:
-  - oraclejdk8
-script: 
-    - gradle --info build javadoc test install || break -1
