@@ -64,24 +64,29 @@ import ca.nrc.cadc.groups.web.view.json.JSONAssociateViewImpl;
 import javax.security.auth.Subject;
 
 
-public class AssociationsResource extends AbstractResource {
+/**
+ * Web resource to handle associations (relationships) as they pertain to the Group Management Services.  Examples are
+ * members and administrators.
+ *
+ * This doubles as a Runnable so that IoC frameworks can run the refresh periodically.
+ */
+public class AssociationsResource extends AbstractResource implements Runnable {
     private final static Logger LOGGER = Logger.getLogger(AssociationsResource.class);
 
     private final static Set<Associate> ASSOCIATE_CACHE = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     // Twelve hours.  Used in the Spring configuration.
-    public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 12 * 60 * 60 * 1000;
+    public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 4 * 60 * 60 * 1000;
 
     private final Suggester<Associate> suggester;
-    private AssociationsCacheState associationsCacheState =
-        AssociationsCacheState.INIT;
+    private AssociationsCacheState associationsCacheState = AssociationsCacheState.INIT;
 
 
     /**
      * Default constructor.
      *
      * @param suggester The suggester to use to match entries.
-     * @throws Exception    For any unknown errors being passed up the call stack.
+     * @throws Exception For any unknown errors being passed up the call stack.
      */
     public AssociationsResource(final Suggester<Associate> suggester) throws Exception {
         super();
@@ -109,6 +114,16 @@ public class AssociationsResource extends AbstractResource {
         });
     }
 
+    /**
+     * This method is called by the timer that will refresh the cache periodically.
+     *
+     * @see Thread#run()
+     */
+    @Override
+    public void run() {
+        refresh();
+    }
+
     private void doRefresh() {
         final long refreshStart = System.currentTimeMillis();
 
@@ -123,11 +138,11 @@ public class AssociationsResource extends AbstractResource {
                     displayName = null;
                 } else {
                     displayName = u.personalDetails.getFirstName() + " " +
-                        u.personalDetails.getLastName();
+                                  u.personalDetails.getLastName();
                 }
 
                 tempSet.add(new Associate(username + ((displayName == null)
-                    ? "" : (" - " + displayName)), AssociateType.USER));
+                                                      ? "" : (" - " + displayName)), AssociateType.USER));
             }
 
             for (final String groupName : getGMSClient().getGroupNames()) {
@@ -146,8 +161,8 @@ public class AssociationsResource extends AbstractResource {
         } finally {
             updateState(AssociationsCacheState.REFRESH_COMPLETE);
             LOGGER.info(String.format(
-                "Refresh of GMUI cache complete in %d seconds",
-                ((System.currentTimeMillis() - refreshStart) / 1000L)));
+                    "Refresh of GMUI cache complete in %d seconds",
+                    ((System.currentTimeMillis() - refreshStart) / 1000L)));
         }
     }
 
@@ -180,7 +195,7 @@ public class AssociationsResource extends AbstractResource {
     /**
      * Accept a POST request to refresh this cache.
      *
-     * @param payload       The payload being POSTed.  Not used.
+     * @param payload The payload being POSTed.  Not used.
      * @throws Exception For anything that needs to be interpreted by the
      *                   Status Service.
      */
@@ -190,8 +205,8 @@ public class AssociationsResource extends AbstractResource {
     }
 
     /**
-     * @return  Representation in JSON format.
-     * @throws Exception    For errors during processing.
+     * @return Representation in JSON format.
+     * @throws Exception For errors during processing.
      */
     @Get("json")
     public Representation representJSON() throws Exception {
