@@ -72,10 +72,10 @@ import javax.security.auth.Subject;
  */
 public class AssociationsResource extends AbstractResource implements Runnable {
     private final static Logger LOGGER = Logger.getLogger(AssociationsResource.class);
-
     private final static Set<Associate> ASSOCIATE_CACHE = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final static String SERVOPS_PROXY_CERT_PATH = System.getProperty("user.home") + "/.ssl/cadcproxy.pem";
 
-    // Twelve hours.  Used in the Spring configuration.
+    // Four hours.  Used in the Spring configuration.
     public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 4 * 60 * 60 * 1000;
 
     private final Suggester<Associate> suggester;
@@ -97,8 +97,8 @@ public class AssociationsResource extends AbstractResource implements Runnable {
 
 
     Subject getAuthorizedUser() {
-        final File servopsCert = new File(System.getProperty("user.home") + "/.pub/proxy.pem");
-        return SSLUtil.createSubject(servopsCert);
+        final File servOpsCert = new File(AssociationsResource.SERVOPS_PROXY_CERT_PATH);
+        return SSLUtil.createSubject(servOpsCert);
     }
 
     /**
@@ -112,6 +112,7 @@ public class AssociationsResource extends AbstractResource implements Runnable {
             doRefresh();
             return null;
         });
+        LOGGER.info("Refreshing GMUI cache: OK");
     }
 
     /**
@@ -195,12 +196,12 @@ public class AssociationsResource extends AbstractResource implements Runnable {
     /**
      * Accept a POST request to refresh this cache.
      *
-     * @param payload The payload being POSTed.  Not used.
+     * @param ignored The payload being POSTed.  Not used.
      * @throws Exception For anything that needs to be interpreted by the
      *                   Status Service.
      */
     @Post
-    public void accept(final Representation payload) throws Exception {
+    public void accept(final Representation ignored) throws Exception {
         refresh();
     }
 
@@ -259,8 +260,7 @@ public class AssociationsResource extends AbstractResource implements Runnable {
     public enum AssociationsCacheState {
         REFRESHING, REFRESH_COMPLETE, INIT;
 
-
-        protected boolean isRefreshing() {
+        boolean isRefreshing() {
             return (this == REFRESHING);
         }
     }
