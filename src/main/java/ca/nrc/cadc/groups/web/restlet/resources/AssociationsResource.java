@@ -73,7 +73,7 @@ import javax.security.auth.Subject;
 public class AssociationsResource extends AbstractResource implements Runnable {
     private final static Logger LOGGER = Logger.getLogger(AssociationsResource.class);
     private final static Set<Associate> ASSOCIATE_CACHE = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private final static String SERVOPS_PROXY_CERT_PATH = System.getProperty("user.home") + "/.pub/proxy.pem";
+    private final static String SERVOPS_PROXY_CERT_PATH = System.getProperty("user.home") + "/.ssl/cadcproxy.pem";
 
     // Four hours.  Used in the Spring configuration.
     public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 4 * 60 * 60 * 1000;
