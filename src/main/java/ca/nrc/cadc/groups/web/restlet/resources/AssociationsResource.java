@@ -86,9 +86,8 @@ public class AssociationsResource extends AbstractResource implements Runnable {
      * Default constructor.
      *
      * @param suggester The suggester to use to match entries.
-     * @throws Exception For any unknown errors being passed up the call stack.
      */
-    public AssociationsResource(final Suggester<Associate> suggester) throws Exception {
+    public AssociationsResource(final Suggester<Associate> suggester) {
         super();
 
         this.suggester = suggester;
@@ -196,7 +195,7 @@ public class AssociationsResource extends AbstractResource implements Runnable {
     /**
      * Accept a POST request to refresh this cache.
      *
-     * @param ignored The payload being POSTed.  Not used.
+     * @param ignored       The payload being POSTed.  Not used.
      * @throws Exception For anything that needs to be interpreted by the
      *                   Status Service.
      */

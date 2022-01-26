@@ -20,14 +20,19 @@
    * @constructor
    */
   function cadcVOTV_filter_default(_viewer) {
-    var $inputField = $(this)
+    const $inputField = $(this)
+    const columnID = $inputField.data('columnId')
 
-    $inputField.on('change keyup', function(e) {
-      _viewer.doFilter($inputField.val() || '', $inputField.data('columnId'))
+    $inputField.on('input', function(e) {
+      const trimmedVal = $.trim($inputField.val())
 
-      var grid = _viewer.getGrid()
-      grid.invalidateAllRows()
-      grid.resizeCanvas()
+      if (trimmedVal && trimmedVal !== '') {
+        _viewer.doFilter($inputField.val() || '', columnID)
+
+        const grid = _viewer.getGrid()
+        grid.invalidateAllRows()
+        grid.resizeCanvas()
+      }
     })
 
     return this

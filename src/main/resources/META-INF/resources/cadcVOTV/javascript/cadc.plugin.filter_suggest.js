@@ -76,7 +76,7 @@
       )
     }
 
-    $inputField.on('change keyup', function(event) {
+    $inputField.on('input', function(event) {
       var trimmedVal = $.trim($inputField.val())
 
       // Clear it if the input is cleared.
