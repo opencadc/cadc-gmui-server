@@ -73,7 +73,7 @@ import javax.security.auth.Subject;
 public class AssociationsResource extends AbstractResource implements Runnable {
     private final static Logger LOGGER = Logger.getLogger(AssociationsResource.class);
     private final static Set<Associate> ASSOCIATE_CACHE = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    private final static String SERVOPS_PROXY_CERT_PATH = System.getProperty("user.home") + "/.ssl/cadcproxy.pem";
+    private final static String SERVOPS_PROXY_CERT_PATH = System.getProperty("user.home") + "/.pub/proxy.pem";
 
     // Four hours.  Used in the Spring configuration.
     public final static long DEFAULT_CACHE_REFRESH_PERIOD_MS = 4 * 60 * 60 * 1000;
@@ -86,9 +86,8 @@ public class AssociationsResource extends AbstractResource implements Runnable {
      * Default constructor.
      *
      * @param suggester The suggester to use to match entries.
-     * @throws Exception For any unknown errors being passed up the call stack.
      */
-    public AssociationsResource(final Suggester<Associate> suggester) throws Exception {
+    public AssociationsResource(final Suggester<Associate> suggester) {
         super();
 
         this.suggester = suggester;
@@ -196,7 +195,7 @@ public class AssociationsResource extends AbstractResource implements Runnable {
     /**
      * Accept a POST request to refresh this cache.
      *
-     * @param ignored The payload being POSTed.  Not used.
+     * @param ignored       The payload being POSTed.  Not used.
      * @throws Exception For anything that needs to be interpreted by the
      *                   Status Service.
      */
