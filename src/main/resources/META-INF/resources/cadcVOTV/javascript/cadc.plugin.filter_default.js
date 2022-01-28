@@ -26,13 +26,15 @@
     $inputField.on('input', function(e) {
       const trimmedVal = $.trim($inputField.val())
 
-      if (trimmedVal && trimmedVal !== '') {
-        _viewer.doFilter($inputField.val() || '', columnID)
-
-        const grid = _viewer.getGrid()
-        grid.invalidateAllRows()
-        grid.resizeCanvas()
+      if (!trimmedVal || trimmedVal === '') {
+        _viewer.getColumnFilters()[columnID] = ''
       }
+
+      _viewer.doFilter(trimmedVal || '', columnID)
+
+      const grid = _viewer.getGrid()
+      grid.invalidateAllRows()
+      grid.resizeCanvas()
     })
 
     return this
