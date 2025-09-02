@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                           http://www.springframework.org/schema/util
+                           http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+    <!-- Main router -->
+    <bean name="router" class="org.restlet.ext.spring.SpringBeanRouter"/>
+
+    <!-- The Restlet Component -->
+    <bean id="component" name="component"
+          class="org.restlet.ext.spring.SpringComponent">
+        <property name="defaultTarget" ref="application"/>
+        <property name="clientsList">
+            <list>
+                <value>http</value>
+                <value>file</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Metadata Service -->
+    <bean id="metadataService" name="metadataService"
+          class="ca.nrc.cadc.groups.web.restlet.services.AccessControlWebMetadataService"/>
+
+    <!-- Web Status Service -->
+    <bean id="statusService" name="statusService"
+          class="ca.nrc.cadc.groups.web.restlet.services.GroupsWebStatusService"/>
+
+    <!-- The Restlet Application -->
+    <bean id="application" name="application" class="org.restlet.Application">
+        <property name="inboundRoot" ref="router"/>
+        <property name="statusService" ref="statusService"/>
+        <property name="tunnelService">
+            <bean class="org.restlet.service.TunnelService">
+                <constructor-arg value="true"/>
+                <constructor-arg value="false"/>
+                <constructor-arg value="true"/>
+            </bean>
+        </property>
+        <property name="metadataService" ref="metadataService"/>
+        <property name="connectorService">
+            <bean class="org.restlet.service.ConnectorService">
+                <property name="enabled" value="true"/>
+                <property name="clientProtocols">
+                    <list>
+                        <bean class="org.restlet.data.Protocol"
+                              factory-method="valueOf">
+                            <constructor-arg value="WAR"/>
+                        </bean>
+                        <bean class="org.restlet.data.Protocol"
+                              factory-method="valueOf">
+                            <constructor-arg value="FILE"/>
+                        </bean>
+                        <bean class="org.restlet.data.Protocol"
+                              factory-method="valueOf">
+                            <constructor-arg value="HTTP"/>
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!-- Service Resources -->
+    <!--
+       *****************
+       Instantiable beans declared here MUST be of scope prototype, or some cached
+       state will interfere with proper organization.
+
+       jenkinsd 2014.10.23
+       *****************
+    -->
+    <bean abstract="true" name="baseResource"
+          class="ca.nrc.cadc.groups.web.restlet.resources.AbstractResource"/>
+
+    <bean name="/groups" id="groupListResource"
+          class="ca.nrc.cadc.groups.web.restlet.resources.GroupListResource"
+          scope="prototype" parent="baseResource"/>
+
+    <bean name="/group/{groupName}" id="groupResource"
+          class="ca.nrc.cadc.groups.web.restlet.resources.GroupResource"
+          scope="prototype" parent="baseResource"/>
+
+    <bean name="/group/{groupName}/members" id="groupMemberListResource"
+          parent="baseResource" scope="prototype"
+          class="ca.nrc.cadc.groups.web.restlet.resources.GroupMemberListResource"/>
+
+    <bean name="/group/{groupName}/members/{assocID}" id="groupMemberResource"
+          parent="baseResource" scope="prototype"
+          class="ca.nrc.cadc.groups.web.restlet.resources.GroupMemberResource"/>
+
+    <bean name="/group/{groupName}/admins" id="groupAdminListResource"
+          scope="prototype" parent="baseResource"
+          class="ca.nrc.cadc.groups.web.restlet.resources.GroupAdminListResource"/>
+
+    <bean name="/group/{groupName}/admins/{assocID}" id="groupAdminResource"
+          parent="baseResource" scope="prototype"
+          class="ca.nrc.cadc.groups.web.restlet.resources.GroupAdminResource"/>
+
+    <bean name="associationSuggester" id="associationSuggester"
+          class="ca.nrc.cadc.groups.web.suggest.RegexSuggesterImpl">
+        <constructor-arg index="0">
+            <bean class="ca.nrc.cadc.groups.web.suggest.AssociateMatcherImpl"/>
+        </constructor-arg>
+        <constructor-arg index="1" value="7"/>
+        <constructor-arg index="2">
+            <bean class="ca.nrc.cadc.groups.web.AssociateCaseInsensitiveComparator"/>
+        </constructor-arg>
+    </bean>
+
+    <bean name="/associations" id="associationsResource" lazy-init="true"
+          parent="baseResource" scope="prototype"
+          class="ca.nrc.cadc.groups.web.restlet.resources.AssociationsResource">
+        <constructor-arg index="0" ref="associationSuggester"/>
+    </bean>
+
+    <bean id="timerTask"
+          class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+        <property name="period">
+            <util:constant static-field="ca.nrc.cadc.groups.web.restlet.resources.AssociationsResource.DEFAULT_CACHE_REFRESH_PERIOD_MS"/>
+        </property>
+        <!-- The delay is set to 0 so that the task starts immediately after the application starts -->
+        <property name="delay" value="0"/>
+        <property name="runnable" ref="associationsResource"/>
+    </bean>
+
+    <bean class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">
+        <property name="scheduledExecutorTasks" ref="timerTask" />
+    </bean>
+
+</beans>

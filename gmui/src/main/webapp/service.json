@@ -1,0 +1,391 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Group Management UI API",
+    "version": "1.0.0",
+    "description": "API for managing groups, group members, and admins from the Group Management UI."
+  },
+  "servers": [
+    {
+      "url": "https://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/"
+    }
+  ],
+  "paths": {
+    "/gmui/service/groups": {
+      "get": {
+        "summary": "List all groups",
+        "responses": {
+          "200": {
+            "description": "A list of groups"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to view groups"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new group",
+        "parameters": [
+          {
+            "name": "group-name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/groupDescription"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Group created"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to create groups"
+          },
+          "409": {
+            "description": "Conflict - Group already exists"
+          }
+        }
+      }
+    },
+    "/gmui/service/group/{groupName}": {
+      "get": {
+        "summary": "Get group details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group details"
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to view groups"
+          }
+        }
+      },
+      "post": {
+        "summary": "Update group details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          },
+          {
+            "$ref": "#/components/parameters/groupDescription"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Group updated"
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to search groups"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Group deleted"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to delete groups"
+          }
+        }
+      }
+    },
+    "/gmui/service/group/{groupName}/members": {
+      "get": {
+        "summary": "List members of the group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of group members"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to view group members"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a member to the group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          },
+          {
+            "$ref": "#/components/parameters/assocIDQuery"
+          },
+          {
+            "$ref": "#/components/parameters/assocType"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Member added"
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to add members"
+          }
+        }
+      }
+    },
+    "/gmui/service/group/{groupName}/members/{assocID}": {
+      "delete": {
+        "summary": "Remove a member from the group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          },
+          {
+            "$ref": "#/components/parameters/assocID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Member removed"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to delete group members"
+          }
+        }
+      }
+    },
+    "/gmui/service/group/{groupName}/admins": {
+      "get": {
+        "summary": "List admins of the group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of group admins"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to view group admins"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add an admin to the group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          },
+          {
+            "$ref": "#/components/parameters/assocIDQuery"
+          },
+          {
+            "$ref": "#/components/parameters/assocType"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Admin added"
+          },
+          "404": {
+            "description": "Group not found"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to add admins"
+          }
+        }
+      }
+    },
+    "/gmui/service/group/{groupName}/admins/{assocID}": {
+      "delete": {
+        "summary": "Remove an admin from the group",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/groupName"
+          },
+          {
+            "$ref": "#/components/parameters/assocID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Admin removed"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to remove group admins"
+          }
+        }
+      }
+    },
+    "/gmui/service/associations": {
+      "get": {
+        "summary": "List all associations",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/assocSearchParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of associations"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to list cached users or groups"
+          }
+        }
+      },
+      "post": {
+        "summary": "Force a refresh of the User and Group associations cache.",
+        "responses": {
+          "204": {
+            "description": "Cache refreshed"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to refresh associations cache"
+          }
+        }
+      }
+    },
+    "/gmui/logControl": {
+      "post": {
+        "summary": "Set logging level",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/level"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logging control updated"
+          },
+          "403": {
+            "description": "Forbidden - User does not have permission to modify logging level"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "groupName": {
+        "name": "groupName",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "groupDescription": {
+        "name": "group-description",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "assocID": {
+        "name": "assocID",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "assocIDQuery": {
+        "name": "assoc-id",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "assocType": {
+        "name": "assoc-type",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "GROUP",
+            "USER"
+          ]
+        }
+      },
+      "assocSearchParam": {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "level": {
+        "name": "level",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "ERROR",
+            "WARN",
+            "INFO",
+            "DEBUG"
+          ]
+        }
+      }
+    },
+    "schemas": {
+      "Group": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Association": {
+        "type": "object",
+        "properties": {
+          "userID": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "addedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
